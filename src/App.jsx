@@ -1,29 +1,29 @@
 import { useEffect, useState } from 'react'
 
-import { supabase } from './lib/supabaseClient'
+import { supabase } from './supabaseClient'
 
 function App() {
-  const [instruments, setInstruments] = useState([])
+  const [listings, setListings] = useState([])
 
   useEffect(() => {
-    getInstruments()
-  }, [])
+    async function getListings() {
+      const { data, error } = await supabase.from('listings').select('id, title')
 
-  async function getInstruments() {
-    const { data, error } = await supabase.from('instruments').select()
+      if (error) {
+        console.error(error)
+        return
+      }
 
-    if (error) {
-      console.error(error)
-      return
+      setListings(data)
     }
 
-    setInstruments(data)
-  }
+    getListings()
+  }, [])
 
   return (
     <ul>
-      {instruments.map((instrument) => (
-        <li key={instrument.id}>{instrument.name}</li>
+      {listings.map((listing) => (
+        <li key={listing.id}>{listing.title}</li>
       ))}
     </ul>
   )
