@@ -1,31 +1,14 @@
-import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router'
 
-import { supabase } from './supabaseClient'
+import HomeFeed from './pages/HomeFeed'
+import Landing from './pages/Landing'
 
 function App() {
-  const [listings, setListings] = useState([])
-
-  useEffect(() => {
-    async function getListings() {
-      const { data, error } = await supabase.from('listings').select('id, title')
-
-      if (error) {
-        console.error(error)
-        return
-      }
-
-      setListings(data)
-    }
-
-    getListings()
-  }, [])
-
   return (
-    <ul>
-      {listings.map((listing) => (
-        <li key={listing.id}>{listing.title}</li>
-      ))}
-    </ul>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/browse" element={<HomeFeed />} />
+    </Routes>
   )
 }
 

@@ -1,0 +1,35 @@
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-subtle);
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-block: 28px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.footer__note {
+  font-size: 13px;
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.footer__links a:hover {
+  color: var(--text);
+}

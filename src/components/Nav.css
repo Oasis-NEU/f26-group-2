@@ -1,0 +1,127 @@
+.nav {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 16px;
+
+  @media (min-width: 768px) {
+    gap: 28px;
+  }
+}
+
+.nav__inner .btn {
+  padding: 10px 14px;
+
+  @media (min-width: 768px) {
+    padding: 12px 20px;
+  }
+}
+
+.nav__inner--app {
+  flex-wrap: wrap;
+
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+  }
+}
+
+.nav__spacer {
+  flex: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.26px;
+}
+
+.logo__name {
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.38px;
+  white-space: nowrap;
+}
+
+.nav__links {
+  display: none;
+  gap: 28px;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.nav__link {
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nav__link:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.nav__link--hide-mobile {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: inline;
+  }
+}
+
+/* On mobile the app search drops to its own row under the logo. */
+.nav__search {
+  order: 10;
+  flex: 1 0 100%;
+
+  @media (min-width: 768px) {
+    order: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.nav__inner--app .logo {
+  margin-right: auto;
+
+  @media (min-width: 768px) {
+    margin-right: 0;
+  }
+}
+
+.nav__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--avatar-bg);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
