@@ -1,15 +1,11 @@
-import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router'
 
 import ListingCard from '../components/ListingCard'
 import Nav from '../components/Nav'
-import {
-  CATEGORIES,
-  CONDITIONS,
-  PAYMENT_METHODS,
-  PICKUP_SPOTS,
-  sampleListings,
-} from '../data/sampleListings'
+import { fetchListings } from '../data/listings'
+import { CATEGORIES, CONDITIONS, PAYMENT_METHODS, PICKUP_SPOTS } from '../data/sampleListings'
+import { supabase } from '../supabaseClient'
 import './HomeFeed.css'
 
 const SORTS = {
@@ -53,6 +49,32 @@ function HomeFeed() {
   const [pickups, setPickups] = useState([])
   const [sort, setSort] = useState('newest')
 
+  const [allListings, setAllListings] = useState([])
+  // 'loading' | 'ready' | 'signed-out' | 'error'
+  const [loadState, setLoadState] = useState('loading')
+
+  useEffect(() => {
+    async function load() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session) {
+        setLoadState('signed-out')
+        return
+      }
+
+      try {
+        setAllListings(await fetchListings())
+        setLoadState('ready')
+      } catch (error) {
+        console.error(error)
+        setLoadState('error')
+      }
+    }
+
+    load()
+  }, [])
+
   function selectCategory(next) {
     const params = new URLSearchParams(searchParams)
     if (next === 'All') params.delete('category')
@@ -65,7 +87,7 @@ function HomeFeed() {
     const min = minPrice === '' ? null : Number(minPrice) * 100
     const max = maxPrice === '' ? null : Number(maxPrice) * 100
 
-    const filtered = sampleListings.filter((listing) => {
+    const filtered = allListings.filter((listing) => {
       if (category === 'Free' ? listing.price_cents !== 0 : category !== 'All' && listing.category !== category) return false
       if (q && !listing.title.toLowerCase().includes(q)) return false
       if (min !== null && listing.price_cents < min) return false
@@ -79,7 +101,7 @@ function HomeFeed() {
     if (sort === 'price-asc') return [...filtered].sort((a, b) => a.price_cents - b.price_cents)
     if (sort === 'price-desc') return [...filtered].sort((a, b) => b.price_cents - a.price_cents)
     return filtered
-  }, [category, query, minPrice, maxPrice, conditions, payments, pickups, sort])
+  }, [allListings, category, query, minPrice, maxPrice, conditions, payments, pickups, sort])
 
   return (
     <>
@@ -177,7 +199,15 @@ function HomeFeed() {
             </select>
           </div>
 
-          {listings.length ? (
+          {loadState === 'loading' ? (
+            <p className="feed__empty">Loading listings…</p>
+          ) : loadState === 'signed-out' ? (
+            <p className="feed__empty">
+              <Link to="/login">Log in</Link> with your Northeastern email to see listings.
+            </p>
+          ) : loadState === 'error' ? (
+            <p className="feed__empty">Couldn't load listings. Refresh the page to try again.</p>
+          ) : listings.length ? (
             <div className="listing-grid">
               {listings.map((listing) => (
                 <ListingCard key={listing.id} listing={listing} />
