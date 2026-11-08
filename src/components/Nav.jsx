@@ -1,5 +1,6 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
+import { supabase } from '../supabaseClient'
 import SearchBar from './SearchBar'
 import './Nav.css'
 
@@ -15,6 +16,17 @@ function Logo() {
 // variant="public" is the logged-out landing nav; variant="app" is the
 // signed-in nav with search, messages and the user's avatar.
 function Nav({ variant = 'public', initials = 'MM' }) {
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    // Leave the protected page first. If we signed out first, RequireAuth
+    // would see session === null and redirect to /login before we got here.
+    navigate('/')
+    // Clears the session from localStorage and fires SIGNED_OUT, which
+    // AuthProvider hears and sets session to null.
+    await supabase.auth.signOut()
+  }
+
   if (variant === 'app') {
     return (
       <header className="nav">
@@ -32,6 +44,9 @@ function Nav({ variant = 'public', initials = 'MM' }) {
           <Link className="nav__avatar" to="/profile" aria-label="Your profile">
             {initials}
           </Link>
+          <button className="btn btn--secondary" type="button" onClick={handleLogout}>
+            Log out
+          </button>
         </div>
       </header>
     )

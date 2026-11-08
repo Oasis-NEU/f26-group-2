@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import Nav from '../components/Nav'
 import { supabase } from '../supabaseClient'
@@ -74,6 +74,10 @@ function Login() {
           <button className="btn btn--primary auth__submit" type="submit" disabled={submitting}>
             {submitting ? 'Logging in…' : 'Log in'}
           </button>
+
+          <p className="auth__switch">
+            New to NU Exchange? <Link to="/signup">Sign up</Link>
+          </p>
         </form>
       </main>
     </>

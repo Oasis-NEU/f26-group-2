@@ -38,3 +38,21 @@
   margin-top: 16px;
   width: 100%;
 }
+
+.auth__text {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.auth__switch {
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+
+  a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
