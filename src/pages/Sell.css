@@ -1,0 +1,490 @@
+/* The sell page uses Northeastern red for its primary button and accents.
+   Overriding the tokens here keeps the change scoped to this page. */
+.sell {
+  --accent: #c8102e;
+  --accent-soft: rgba(200, 16, 46, 0.18);
+  --error: #ff6b6b;
+
+  display: flex;
+  justify-content: center;
+  padding-block: 24px 96px;
+
+  @media (min-width: 768px) {
+    padding-block: 48px 120px;
+  }
+}
+
+.sell__form,
+.sell__done {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.sell__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sell__title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+}
+
+.sell__subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.sell__card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+
+  @media (min-width: 768px) {
+    padding: 28px;
+  }
+}
+
+.sell__section-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.sell__section-title + .field__hint {
+  margin-top: -12px;
+}
+
+/* Fields */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field__label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field__label {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+legend.field__label {
+  margin-bottom: 8px;
+}
+
+.field__required {
+  margin-left: 2px;
+  color: var(--text-muted);
+}
+
+.field__optional {
+  margin-left: 4px;
+  color: var(--text-subtle);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.field__hint,
+.field__count {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.field__count {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.field__error {
+  color: var(--error);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 16px text keeps iOS from zooming in on focus; 44px is a comfortable tap target. */
+.sell .text-input {
+  height: 44px;
+  font-size: 16px;
+}
+
+.sell .text-input:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+.sell .text-input[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.sell textarea.text-input {
+  height: auto;
+  min-height: 132px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: inherit;
+  resize: vertical;
+}
+
+.sell select.text-input {
+  padding-right: 36px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23a3a3a3' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+.sell .btn:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.sell .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+/* Price */
+
+.price-field {
+  position: relative;
+}
+
+.price-field__prefix {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  color: var(--text-muted);
+  font-size: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.sell .price-field__input {
+  padding-left: 26px;
+}
+
+/* Radio and checkbox pills */
+
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.option-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.option-pill input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.option-pill:hover {
+  border-color: var(--control-border);
+}
+
+.option-pill:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.option-pill:has(input:focus-visible) {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.option-pill--check:has(input:checked)::before {
+  content: '✓';
+  font-weight: 700;
+}
+
+/* Photos */
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.photo-grid__item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.photo-grid__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-grid__cover {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.72);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.photo-grid__remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-btn);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.photo-grid__remove:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.photo-grid__remove:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+.photo-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  aspect-ratio: 1;
+  padding: 8px;
+  border: 1.5px dashed var(--control-border);
+  border-radius: var(--radius-btn);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.photo-picker:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.photo-grid__add:has(input:focus-visible) .photo-picker {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.photo-picker--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.photo-picker__plus {
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1;
+}
+
+.photo-picker__count {
+  color: var(--text-subtle);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tags */
+
+.tag-entry {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-entry .btn {
+  flex-shrink: 0;
+  height: 44px;
+  padding-block: 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 2px 2px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 14px;
+}
+
+.tag__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tag__remove:hover {
+  background: var(--border-strong);
+  color: var(--text);
+}
+
+.tag__remove:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 0;
+}
+
+/* Submit */
+
+.sell__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.sell__form-error {
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 500;
+
+  @media (min-width: 768px) {
+    margin-right: auto;
+  }
+}
+
+.sell__submit {
+  width: 100%;
+  min-height: 48px;
+
+  @media (min-width: 768px) {
+    width: auto;
+    min-width: 180px;
+  }
+}
+
+/* Success */
+
+.sell__done {
+  align-items: center;
+  padding-block: 40px;
+  text-align: center;
+}
+
+.sell__done-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sell__done-title:focus {
+  outline: none;
+}
+
+.sell__done-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    justify-content: center;
+    width: auto;
+  }
+}

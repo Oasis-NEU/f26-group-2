@@ -4,6 +4,7 @@ import RequireAuth from './auth/RequireAuth'
 import HomeFeed from './pages/HomeFeed'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
+import Sell from './pages/Sell'
 import Signup from './pages/Signup'
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
         element={
           <RequireAuth>
             <HomeFeed />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/sell"
+        element={
+          <RequireAuth>
+            <Sell />
           </RequireAuth>
         }
       />
