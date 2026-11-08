@@ -17,13 +17,14 @@ const CONDITION_LABELS = {
   like_new: 'Like new',
   good: 'Good',
   fair: 'Fair',
-  poor: 'Poor',
+  poor: 'Old',
 }
 
 const PAYMENT_LABELS = {
   cash: 'Cash',
   venmo: 'Venmo',
   zelle: 'Zelle',
+  cashapp: 'Cash App',
   trade: 'Open to trade',
 }
 
