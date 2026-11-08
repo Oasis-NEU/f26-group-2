@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
 import Nav from '../components/Nav'
+import { createListing } from '../data/createListing'
 import {
   SELL_CATEGORIES,
   SELL_CONDITIONS,
@@ -12,6 +13,7 @@ import './Sell.css'
 
 const MAX_PHOTOS = 6
 const MAX_PHOTO_MB = 5
+const MIN_TITLE = 3 // the listings table rejects shorter titles
 const MAX_TITLE = 80
 const MAX_DESCRIPTION = 1000
 const MAX_TAGS = 5
@@ -75,6 +77,7 @@ function validate(form) {
 
   const title = form.title.trim()
   if (!title) errors.title = 'Add a title.'
+  else if (title.length < MIN_TITLE) errors.title = `Use at least ${MIN_TITLE} characters.`
   else if (title.length > MAX_TITLE) errors.title = `Keep the title to ${MAX_TITLE} characters.`
 
   const description = form.description.trim()
@@ -259,15 +262,16 @@ function Sell() {
 
     setSummary('')
     setSubmitting(true)
-    const listing = buildListing(form, photos)
 
-    // Front end only for now: nothing is saved. Replace this delay with the
-    // Supabase photo uploads and listings insert.
-    await new Promise((resolve) => setTimeout(resolve, 600))
-    console.log('New listing', listing)
-
-    setSubmitting(false)
-    setSubmitted(true)
+    try {
+      await createListing(buildListing(form, photos))
+      setSubmitted(true)
+    } catch (error) {
+      console.error(error.cause ?? error)
+      setSummary(error.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function startOver() {
@@ -276,6 +280,7 @@ function Sell() {
     setForm(EMPTY_FORM)
     setTagDraft('')
     setErrors({})
+    setSummary('')
     setSubmitted(false)
   }
 
@@ -293,12 +298,9 @@ function Sell() {
               ✓
             </span>
             <h1 className="sell__title sell__done-title" id="sell-done-title" tabIndex={-1} ref={doneHeadingRef}>
-              Your listing is ready
+              Your listing is posted
             </h1>
-            <p className="sell__subtitle">
-              Posting isn’t connected yet, so nothing was saved. The listing data is in the browser
-              console.
-            </p>
+            <p className="sell__subtitle">It’s now live on Browse for other students to see.</p>
             <div className="sell__done-actions">
               <button className="btn btn--primary" type="button" onClick={startOver}>
                 List another item
