@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 
+import ResendVerification from '../auth/ResendVerification'
 import Nav from '../components/Nav'
 import { supabase } from '../supabaseClient'
 import './Login.css'
@@ -10,20 +11,29 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  // Set when the account exists but its email hasn't been verified yet.
+  const [unverifiedEmail, setUnverifiedEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(event) {
     event.preventDefault()
     setError('')
+    setUnverifiedEmail('')
     setSubmitting(true)
 
+    const cleanEmail = email.trim().toLowerCase()
     const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email: cleanEmail,
       password,
     })
 
     setSubmitting(false)
     if (error) {
+      // Supabase refuses to log in unverified accounts ("Confirm email" is on).
+      if (error.code === 'email_not_confirmed') {
+        setUnverifiedEmail(cleanEmail)
+        return
+      }
       setError(error.message)
       return
     }
@@ -64,6 +74,9 @@ function Login() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
+          <Link className="auth__forgot" to="/forgot-password">
+            Forgot password?
+          </Link>
 
           {error && (
             <p className="auth__error" role="alert">
@@ -71,9 +84,18 @@ function Login() {
             </p>
           )}
 
+          {unverifiedEmail && (
+            <p className="auth__error" role="alert">
+              Verify your email first. Click the link we sent to {unverifiedEmail} when you signed
+              up.
+            </p>
+          )}
+
           <button className="btn btn--primary auth__submit" type="submit" disabled={submitting}>
             {submitting ? 'Logging in…' : 'Log in'}
           </button>
+
+          {unverifiedEmail && <ResendVerification email={unverifiedEmail} />}
 
           <p className="auth__switch">
             New to NU Exchange? <Link to="/signup">Sign up</Link>

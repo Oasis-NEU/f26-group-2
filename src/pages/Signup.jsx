@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 
+import ResendVerification from '../auth/ResendVerification'
 import Nav from '../components/Nav'
 import { supabase } from '../supabaseClient'
 import './Login.css'
@@ -81,8 +82,10 @@ function Signup() {
             <h1 className="auth__title">Check your inbox</h1>
             <p className="auth__text">
               We sent a verification link to <strong>{sentTo}</strong>. Click it to finish signing
-              up. The link expires in 1 hours.
+              up. The link expires in 1 hour.
             </p>
+            <p className="auth__text">Didn’t get it? Check your spam folder, or send a new one.</p>
+            <ResendVerification email={sentTo} />
             <p className="auth__switch">
               Already verified? <Link to="/login">Log in</Link>
             </p>

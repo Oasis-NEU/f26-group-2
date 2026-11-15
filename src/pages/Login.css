@@ -56,3 +56,16 @@
     text-underline-offset: 3px;
   }
 }
+
+.auth__forgot {
+  align-self: flex-end;
+  padding-block: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--text);
+  }
+}

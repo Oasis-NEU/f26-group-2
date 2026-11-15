@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 
+import { useAuth } from '../auth/AuthContext'
 import ListingCard from '../components/ListingCard'
 import Nav from '../components/Nav'
 import { fetchListings } from '../data/listings'
 import { CATEGORIES, CONDITIONS, PAYMENT_METHODS, PICKUP_SPOTS } from '../data/sampleListings'
-import { supabase } from '../supabaseClient'
 import './HomeFeed.css'
 
 const SORTS = {
@@ -50,19 +50,14 @@ function HomeFeed() {
   const [sort, setSort] = useState('newest')
 
   const [allListings, setAllListings] = useState([])
-  // 'loading' | 'ready' | 'signed-out' | 'error'
+  // 'loading' | 'ready' | 'error'
   const [loadState, setLoadState] = useState('loading')
+  const { session } = useAuth()
 
+  // Anyone can load the feed. For logged-out visitors, the database only
+  // returns card info for active listings (see the public_listing_feed migration).
   useEffect(() => {
     async function load() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      if (!session) {
-        setLoadState('signed-out')
-        return
-      }
-
       try {
         setAllListings(await fetchListings())
         setLoadState('ready')
@@ -105,7 +100,7 @@ function HomeFeed() {
 
   return (
     <>
-      <Nav variant="app" />
+      <Nav variant={session ? 'app' : 'public'} />
 
       <div className="container chips-row" role="toolbar" aria-label="Categories">
         {['All', ...CATEGORIES].map((name) => (
@@ -178,6 +173,12 @@ function HomeFeed() {
         </details>
 
         <section className="feed" aria-label="Listings">
+          {!session && (
+            <p className="feed__notice">
+              <Link to="/login">Log in</Link> with your Northeastern email to see details and
+              message sellers.
+            </p>
+          )}
           <div className="feed__head">
             <p className="feed__count">
               {listings.length} {listings.length === 1 ? 'listing' : 'listings'}
@@ -201,10 +202,6 @@ function HomeFeed() {
 
           {loadState === 'loading' ? (
             <p className="feed__empty">Loading listings…</p>
-          ) : loadState === 'signed-out' ? (
-            <p className="feed__empty">
-              <Link to="/login">Log in</Link> with your Northeastern email to see listings.
-            </p>
           ) : loadState === 'error' ? (
             <p className="feed__empty">Couldn't load listings. Refresh the page to try again.</p>
           ) : listings.length ? (

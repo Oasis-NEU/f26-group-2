@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 
+import { useAuth } from '../auth/AuthContext'
 import './ListingCard.css'
 
 function formatPrice(cents) {
@@ -8,10 +9,12 @@ function formatPrice(cents) {
 }
 
 function ListingCard({ listing }) {
+  const { session } = useAuth()
   const tradeOk = listing.payment_methods?.includes('Open to trade')
 
+  // Details are members-only, so logged-out visitors go to log in instead.
   return (
-    <Link className="listing-card" to={`/listings/${listing.id}`}>
+    <Link className="listing-card" to={session ? `/listings/${listing.id}` : '/login'}>
       <div className="listing-card__thumb">
         {listing.image_url ? (
           <img src={listing.image_url} alt="" />

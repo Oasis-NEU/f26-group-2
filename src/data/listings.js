@@ -57,7 +57,10 @@ function toCard(row) {
   }
 }
 
-// Active listings, newest first. RLS only returns rows to signed-in users.
+// Active listings, newest first. Works logged out too, but only for the
+// columns selected here: the database blocks logged-out users from reading
+// any other listing column. Add a column here and it must also be granted
+// to anon in a migration, or the feed breaks for visitors.
 export async function fetchListings() {
   const { data, error } = await supabase
     .from('listings')
