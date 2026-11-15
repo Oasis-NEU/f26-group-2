@@ -1,0 +1,414 @@
+/* Same Northeastern red as the Sell page, scoped to this page. */
+.detail {
+  --accent: #c8102e;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-block: 16px 96px;
+
+  @media (min-width: 1024px) {
+    padding-block: 24px 120px;
+  }
+}
+
+.detail__back {
+  align-self: flex-start;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.detail__back:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.detail__back:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.detail__message {
+  padding-block: 48px;
+  color: var(--text-muted);
+}
+
+.detail__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(340px, 1fr);
+    align-items: start;
+    gap: 40px;
+  }
+}
+
+.detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.detail__card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
+}
+
+.detail__section-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.detail__muted {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Gallery */
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+
+  @media (min-width: 1024px) {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+.gallery__main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+/* Contain, not cover, so the buyer sees the whole item. */
+.gallery__main img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gallery__main--empty {
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.gallery__empty-note {
+  color: var(--text-subtle);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.gallery__count {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.72);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery__thumbs {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 2px;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.gallery__thumb {
+  display: block;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.gallery__thumb:hover {
+  opacity: 1;
+}
+
+.gallery__thumb--active {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.gallery__thumb:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.gallery__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Main info */
+
+.detail__status {
+  padding: 12px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  font-size: 14px;
+}
+
+.detail__price {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.detail__title {
+  margin-top: -8px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
+}
+
+.detail__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pill {
+  padding: 5px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.detail__facts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.detail__facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.detail__facts dt {
+  color: var(--text-muted);
+}
+
+.detail__facts dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+}
+
+.detail__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail__actions .btn {
+  width: 100%;
+  min-height: 48px;
+}
+
+.detail__actions .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.detail__actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+.detail__note {
+  font-size: 13px;
+}
+
+/* A small, quiet button at the end of the page, away from "Message seller". */
+.detail__report {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.detail__report:hover {
+  border-color: var(--control-border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.detail__report:disabled {
+  cursor: not-allowed;
+}
+
+.detail__report:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.detail__description {
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+
+/* Pickup map */
+
+.pickup__name {
+  margin-top: -8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pickup__map {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border: 0;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+
+  @media (min-width: 768px) {
+    height: 220px;
+  }
+}
+
+.pickup__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pickup__links a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pickup__links a:hover {
+  color: var(--text);
+}
+
+.pickup__links a:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Seller */
+
+.seller__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.seller__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--avatar-bg);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  object-fit: cover;
+}
+
+.seller__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.seller__name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.seller__meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Not found and error */
+
+.detail__empty {
+  align-items: flex-start;
+  max-width: 520px;
+}
+
+.detail__empty-title {
+  font-size: 22px;
+  font-weight: 700;
+}
