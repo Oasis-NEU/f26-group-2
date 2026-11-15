@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useParams } from 'react-router'
 
 import Nav from '../components/Nav'
-import { createListing } from '../data/createListing'
+import { createListing, fetchListingForEdit, updateListing } from '../data/createListing'
 import {
   SELL_CATEGORIES,
   SELL_CONDITIONS,
@@ -125,6 +125,12 @@ function buildListing(form, photos) {
   }
 }
 
+// Photos are { id, file, url } for new uploads and { id, url } for photos a
+// listing already has (edit mode).
+function photoName(photo, index) {
+  return photo.file?.name ?? `current photo ${index + 1}`
+}
+
 function Required() {
   return (
     <span className="field__required" aria-hidden="true">
@@ -142,9 +148,14 @@ function FieldError({ field, message, live = false }) {
   )
 }
 
+// /sell creates a listing; /listings/:id/edit edits one with the same form.
 function Sell() {
+  const { id: editId } = useParams()
+  const isEditing = Boolean(editId)
+  // 'loading' | 'ready' | 'missing' | 'error' (only edit mode loads anything)
+  const [loadState, setLoadState] = useState(isEditing ? 'loading' : 'ready')
   const [form, setForm] = useState(EMPTY_FORM)
-  const [photos, setPhotos] = useState([]) // [{ id, file, url }]
+  const [photos, setPhotos] = useState([]) // see photoName()
   const [tagDraft, setTagDraft] = useState('')
   const [errors, setErrors] = useState({})
   const [summary, setSummary] = useState('')
@@ -161,7 +172,35 @@ function Sell() {
   useEffect(() => {
     photosRef.current = photos
   }, [photos])
-  useEffect(() => () => photosRef.current.forEach((photo) => URL.revokeObjectURL(photo.url)), [])
+  useEffect(
+    () => () =>
+      photosRef.current.forEach((photo) => photo.file && URL.revokeObjectURL(photo.url)),
+    [],
+  )
+
+  // Edit mode: fill the form with the listing's current values.
+  useEffect(() => {
+    if (!editId) return
+    let cancelled = false
+    fetchListingForEdit(editId)
+      .then((listing) => {
+        if (cancelled) return
+        if (!listing) {
+          setLoadState('missing')
+          return
+        }
+        setForm({ ...EMPTY_FORM, ...listing.form })
+        setPhotos(listing.photos.map((photo) => ({ id: nextPhotoId.current++, url: photo.url })))
+        setLoadState('ready')
+      })
+      .catch((error) => {
+        console.error(error)
+        if (!cancelled) setLoadState('error')
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [editId])
 
   useEffect(() => {
     if (submitted) doneHeadingRef.current?.focus()
@@ -208,11 +247,16 @@ function Sell() {
 
   function removePhoto(id) {
     const photo = photos.find((item) => item.id === id)
-    URL.revokeObjectURL(photo.url)
+    if (photo.file) URL.revokeObjectURL(photo.url)
     setPhotos(photos.filter((item) => item.id !== id))
     setFieldError('photos', '')
     // The input may have been disabled at the limit, so focus it after React re-renders.
     requestAnimationFrame(() => photoInputRef.current?.focus())
+  }
+
+  function makeCover(id) {
+    const photo = photos.find((item) => item.id === id)
+    setPhotos([photo, ...photos.filter((item) => item.id !== id)])
   }
 
   function addTag() {
@@ -264,7 +308,15 @@ function Sell() {
     setSubmitting(true)
 
     try {
-      await createListing(buildListing(form, photos))
+      if (isEditing) {
+        await updateListing(
+          editId,
+          buildListing(form, []),
+          photos.map((photo) => (photo.file ? { file: photo.file } : { url: photo.url })),
+        )
+      } else {
+        await createListing(buildListing(form, photos))
+      }
       setSubmitted(true)
     } catch (error) {
       console.error(error.cause ?? error)
@@ -287,6 +339,58 @@ function Sell() {
   const price = normalizePrice(form.price)
   const isFree = PRICE_PATTERN.test(price) && priceToCents(price) === 0
   const photosFull = photos.length >= MAX_PHOTOS
+  let submitLabel = submitting ? 'Posting…' : 'Post listing'
+  if (isEditing) submitLabel = submitting ? 'Saving…' : 'Save changes'
+
+  if (loadState !== 'ready') {
+    let message = 'Loading your listing…'
+    if (loadState === 'missing') message = 'We couldn’t find that listing, or it isn’t yours to edit.'
+    if (loadState === 'error') message = 'Couldn’t load this listing. Refresh the page to try again.'
+    return (
+      <>
+        <Nav variant="app" />
+        <main className="container sell">
+          <section className="sell__card sell__done">
+            <p className="sell__subtitle" role={loadState === 'loading' ? 'status' : 'alert'}>
+              {message}
+            </p>
+            {loadState !== 'loading' && (
+              <Link className="btn btn--secondary" to="/profile">
+                Back to your profile
+              </Link>
+            )}
+          </section>
+        </main>
+      </>
+    )
+  }
+
+  if (submitted && isEditing) {
+    return (
+      <>
+        <Nav variant="app" />
+        <main className="container sell">
+          <section className="sell__card sell__done" aria-labelledby="sell-done-title">
+            <span className="sell__done-icon" aria-hidden="true">
+              ✓
+            </span>
+            <h1 className="sell__title sell__done-title" id="sell-done-title" tabIndex={-1} ref={doneHeadingRef}>
+              Your changes are saved
+            </h1>
+            <p className="sell__subtitle">The updated listing is live on Browse.</p>
+            <div className="sell__done-actions">
+              <Link className="btn btn--primary" to="/profile">
+                Back to your profile
+              </Link>
+              <Link className="btn btn--secondary" to="/browse">
+                Back to browse
+              </Link>
+            </div>
+          </section>
+        </main>
+      </>
+    )
+  }
 
   if (submitted) {
     return (
@@ -322,7 +426,7 @@ function Sell() {
       <main className="container sell">
         <form className="sell__form" onSubmit={handleSubmit} noValidate>
           <header className="sell__header">
-            <h1 className="sell__title">Sell an item</h1>
+            <h1 className="sell__title">{isEditing ? 'Edit listing' : 'Sell an item'}</h1>
             <p className="sell__subtitle">Fields marked * are required.</p>
           </header>
 
@@ -337,12 +441,23 @@ function Sell() {
             <ul className="photo-grid">
               {photos.map((photo, index) => (
                 <li key={photo.id} className="photo-grid__item">
-                  <img src={photo.url} alt={`Photo ${index + 1}: ${photo.file.name}`} />
-                  {index === 0 && <span className="photo-grid__cover">Cover</span>}
+                  <img src={photo.url} alt={`Photo ${index + 1}: ${photoName(photo, index)}`} />
+                  {index === 0 ? (
+                    <span className="photo-grid__cover">Cover</span>
+                  ) : (
+                    <button
+                      className="photo-grid__make-cover"
+                      type="button"
+                      aria-label={`Make photo ${index + 1} the cover`}
+                      onClick={() => makeCover(photo.id)}
+                    >
+                      Make cover
+                    </button>
+                  )}
                   <button
                     className="photo-grid__remove"
                     type="button"
-                    aria-label={`Remove photo ${index + 1} (${photo.file.name})`}
+                    aria-label={`Remove photo ${index + 1} (${photoName(photo, index)})`}
                     onClick={() => removePhoto(photo.id)}
                   >
                     ×
@@ -637,6 +752,10 @@ function Sell() {
                 <option value="" disabled>
                   Choose a spot
                 </option>
+                {/* An older listing's spot that's no longer in the list. */}
+                {form.pickupSpot && !SELL_PICKUP_SPOTS.includes(form.pickupSpot) && (
+                  <option value={form.pickupSpot}>{form.pickupSpot}</option>
+                )}
                 {SELL_PICKUP_SPOTS.map((spot) => (
                   <option key={spot} value={spot}>
                     {spot}
@@ -657,7 +776,7 @@ function Sell() {
               </p>
             )}
             <button className="btn btn--primary sell__submit" type="submit" disabled={submitting}>
-              {submitting ? 'Posting…' : 'Post listing'}
+              {submitLabel}
             </button>
           </div>
         </form>

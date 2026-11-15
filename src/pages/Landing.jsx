@@ -90,12 +90,12 @@ function Landing() {
           </div>
         </section>
 
-        <section className="sell">
+        <section className="sell-cta">
           <div className="container">
-            <div className="sell__card">
+            <div className="sell-cta__card">
               <div>
-                <h2 className="sell__title">Have something to sell?</h2>
-                <p className="sell__body">Post a listing in a couple of minutes. No fees.</p>
+                <h2 className="sell-cta__title">Have something to sell?</h2>
+                <p className="sell-cta__body">Post a listing in a couple of minutes. No fees.</p>
               </div>
               <Link className="btn btn--primary" to="/sell">
                 List an item
