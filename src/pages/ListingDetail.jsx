@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router'
 import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
 import { fetchListing } from '../data/listings'
+import { pickupMapFor } from '../data/pickupLocations'
 import './ListingDetail.css'
 
 const STATUS_NOTES = {
@@ -65,6 +66,41 @@ function Gallery({ images, category }) {
         </ul>
       )}
     </div>
+  )
+}
+
+function PickupMap({ spot }) {
+  const map = pickupMapFor(spot)
+
+  return (
+    <section className="detail__card" aria-labelledby="pickup-heading">
+      <h2 className="detail__section-title" id="pickup-heading">
+        Pickup spot
+      </h2>
+      <p className="pickup__name">{spot}</p>
+
+      {map ? (
+        <>
+          <iframe
+            className="pickup__map"
+            title={`Map of ${spot}`}
+            src={map.embedUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+          <p className="pickup__links">
+            <a href={map.googleUrl} target="_blank" rel="noreferrer">
+              Open in Google Maps<span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+            <a href={map.appleUrl} target="_blank" rel="noreferrer">
+              Open in Apple Maps<span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </p>
+        </>
+      ) : (
+        <p className="detail__muted">Message the seller to agree on a spot on campus.</p>
+      )}
+    </section>
   )
 }
 
@@ -245,20 +281,7 @@ function ListingView({ listing, isOwner }) {
           </section>
         )}
 
-        {listing.tags.length > 0 && (
-          <section className="detail__card" aria-labelledby="tags-heading">
-            <h2 className="detail__section-title" id="tags-heading">
-              Tags
-            </h2>
-            <ul className="detail__pills">
-              {listing.tags.map((tag) => (
-                <li key={tag} className="pill pill--tag">
-                  #{tag}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <PickupMap spot={listing.pickup_spot} />
 
         <SellerCard seller={listing.seller} />
 

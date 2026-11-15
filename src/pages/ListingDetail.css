@@ -228,11 +228,6 @@
   font-weight: 500;
 }
 
-.pill--tag {
-  border-radius: 999px;
-  color: var(--text-muted);
-}
-
 .detail__facts {
   display: flex;
   flex-direction: column;
@@ -319,6 +314,51 @@
   line-height: 1.6;
   white-space: pre-line;
   overflow-wrap: break-word;
+}
+
+/* Pickup map */
+
+.pickup__name {
+  margin-top: -8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pickup__map {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border: 0;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+
+  @media (min-width: 768px) {
+    height: 220px;
+  }
+}
+
+.pickup__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pickup__links a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pickup__links a:hover {
+  color: var(--text);
+}
+
+.pickup__links a:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Seller */

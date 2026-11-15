@@ -111,7 +111,6 @@ function toDetail(row) {
       .filter((method) => method !== 'trade')
       .map((method) => PAYMENT_LABELS[method]),
     open_to_trade: row.open_to_trade || row.payment_methods.includes('trade'),
-    tags: row.listing_tags.map((link) => link.tags?.name).filter(Boolean),
     images: images.map((image, index) => ({
       url: image.url,
       alt: image.alt_text ? `${image.alt_text}, photo ${index + 1}` : `Photo ${index + 1}`,
@@ -129,7 +128,8 @@ function toDetail(row) {
   }
 }
 
-// One listing with its photos, tags and seller, for /listings/:id.
+// One listing with its photos and seller, for /listings/:id. Tags aren't
+// loaded: they're for search, not shown on the page.
 // Returns null when the listing doesn't exist or this user can't see it
 // (sold, deleted, or a bad link). Members only: logged-out visitors can't
 // read these columns.
@@ -142,7 +142,6 @@ export async function fetchListing(id) {
       `id, seller_id, status, title, description, price_cents, is_free, category, condition,
        payment_methods, open_to_trade, course_code, campus_area, created_at,
        listing_images(url, position, alt_text),
-       listing_tags(tags(name)),
        seller:users!listings_seller_id_fkey(display_name, avatar_url, affiliation, grad_year, created_at)`,
     )
     .eq('id', id)
