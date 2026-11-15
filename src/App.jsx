@@ -7,6 +7,7 @@ import HomeFeed from './pages/HomeFeed'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Logout from './pages/Logout'
+import Profile from './pages/Profile'
 import ResetPassword from './pages/ResetPassword'
 import Sell from './pages/Sell'
 import Signup from './pages/Signup'
@@ -40,6 +41,23 @@ function App() {
         element={
           <RequireAuth>
             <Sell />
+          </RequireAuth>
+        }
+      />
+      {/* Same form as /sell, filled in with the listing's current values. */}
+      <Route
+        path="/listings/:id/edit"
+        element={
+          <RequireAuth>
+            <Sell />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <RequireAuth>
+            <Profile />
           </RequireAuth>
         }
       />

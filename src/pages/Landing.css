@@ -136,11 +136,13 @@
   color: var(--text-muted);
 }
 
-.sell .container {
+/* "Have something to sell?" banner. Named sell-cta so it doesn't collide with
+   the Sell page's .sell / .sell__card classes (all CSS ships in one bundle). */
+.sell-cta .container {
   padding-block: 72px;
 }
 
-.sell__card {
+.sell-cta__card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -158,13 +160,13 @@
   }
 }
 
-.sell__title {
+.sell-cta__title {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-.sell__body {
+.sell-cta__body {
   margin-top: 4px;
   font-size: 15px;
   color: var(--text-muted);

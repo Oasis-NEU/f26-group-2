@@ -1,0 +1,224 @@
+/* Profile page. Cards, fields, and option pills come from Sell.css (the page
+   uses the same `.sell` layout); these are the profile-only pieces. */
+
+.profile__header {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.profile__header .sell__subtitle {
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+
+.profile__header .btn {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.profile__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile__submit {
+  min-height: 44px;
+
+  @media (min-width: 768px) {
+    align-self: flex-start;
+    min-width: 160px;
+  }
+}
+
+.profile__success {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.profile__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile__year {
+  max-width: 160px;
+}
+
+/* Photo */
+
+.profile__photo-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 26px;
+  font-weight: 700;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.profile__photo-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  .btn {
+    min-height: 44px;
+  }
+}
+
+.profile__photo-actions:has(input:focus-visible) .btn {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* Listings */
+
+.my-listings {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.my-listing {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px 14px;
+  align-items: center;
+  padding-block: 14px;
+  border-top: 1px solid var(--border);
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 72px 1fr auto;
+  }
+}
+
+.my-listing__thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+.my-listing__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.my-listing__title {
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-listing__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.my-listing__status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.my-listing__status--active {
+  background: var(--accent-soft);
+}
+
+.my-listing__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+
+  .btn {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+
+  @media (min-width: 768px) {
+    grid-column: auto;
+
+    .btn {
+      flex: none;
+    }
+  }
+}
+
+.my-listing__note {
+  flex: 1;
+  color: var(--text-subtle);
+  font-size: 13px;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    flex: none;
+    max-width: 120px;
+    text-align: left;
+  }
+}
+
+/* Delete account */
+
+.profile__danger {
+  border-color: var(--border-strong);
+}
+
+.profile__photo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

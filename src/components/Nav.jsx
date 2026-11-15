@@ -1,19 +1,9 @@
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
+import { getUserInitials } from '../utils/initials'
 import SearchBar from './SearchBar'
 import './Nav.css'
-
-// "Maya Chen" → "MC", "Priya" → "P". Uses the name saved at sign-up, or the
-// part of the email before the @ if there isn't one ("maya.test" → "MT").
-function getInitials(user) {
-  const name = user?.user_metadata?.display_name?.trim() || user?.email?.split('@')[0] || ''
-  const words = name.split(/[\s._-]+/).filter(Boolean)
-  return words
-    .slice(0, 2)
-    .map((word) => word[0].toUpperCase())
-    .join('')
-}
 
 function Logo() {
   return (
@@ -27,9 +17,8 @@ function Logo() {
 // variant="public" is the logged-out landing nav; variant="app" is the
 // signed-in nav with search, messages and the user's avatar.
 function Nav({ variant = 'public' }) {
-  const navigate = useNavigate()
   const { user } = useAuth()
-  const initials = getInitials(user)
+  const avatarUrl = user?.user_metadata?.avatar_url
 
   if (variant === 'app') {
     return (
@@ -45,12 +34,10 @@ function Nav({ variant = 'public' }) {
           <Link className="btn btn--primary" to="/sell">
             Sell
           </Link>
+          {/* Log out lives on the profile page. */}
           <Link className="nav__avatar" to="/profile" aria-label="Your profile">
-            {initials}
+            {avatarUrl ? <img src={avatarUrl} alt="" /> : getUserInitials(user)}
           </Link>
-          <button className="btn btn--secondary" type="button" onClick={() => navigate('/logout')}>
-            Log out
-          </button>
         </div>
       </header>
     )
