@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router'
 
+import RedirectIfSignedIn from './auth/RedirectIfSignedIn'
 import RequireAuth from './auth/RequireAuth'
 import ForgotPassword from './pages/ForgotPassword'
 import HomeFeed from './pages/HomeFeed'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
+import Logout from './pages/Logout'
 import ResetPassword from './pages/ResetPassword'
 import Sell from './pages/Sell'
 import Signup from './pages/Signup'
@@ -13,8 +15,17 @@ function App() {
   return (
     <Routes>
       {/* Public: anyone can see these */}
-      <Route path="/" element={<Landing />} />
+      {/* Home page is for logged-out visitors; logged-in users go to /browse */}
+      <Route
+        path="/"
+        element={
+          <RedirectIfSignedIn>
+            <Landing />
+          </RedirectIfSignedIn>
+        }
+      />
       <Route path="/login" element={<Login />} />
+      <Route path="/logout" element={<Logout />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       {/* Not wrapped in RequireAuth: the reset link logs the user in on arrival,

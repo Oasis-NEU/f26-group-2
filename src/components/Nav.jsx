@@ -1,8 +1,19 @@
 import { Link, useNavigate } from 'react-router'
 
-import { supabase } from '../supabaseClient'
+import { useAuth } from '../auth/AuthContext'
 import SearchBar from './SearchBar'
 import './Nav.css'
+
+// "Maya Chen" → "MC", "Priya" → "P". Uses the name saved at sign-up, or the
+// part of the email before the @ if there isn't one ("maya.test" → "MT").
+function getInitials(user) {
+  const name = user?.user_metadata?.display_name?.trim() || user?.email?.split('@')[0] || ''
+  const words = name.split(/[\s._-]+/).filter(Boolean)
+  return words
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('')
+}
 
 function Logo() {
   return (
@@ -15,17 +26,10 @@ function Logo() {
 
 // variant="public" is the logged-out landing nav; variant="app" is the
 // signed-in nav with search, messages and the user's avatar.
-function Nav({ variant = 'public', initials = 'MM' }) {
+function Nav({ variant = 'public' }) {
   const navigate = useNavigate()
-
-  async function handleLogout() {
-    // Leave the protected page first. If we signed out first, RequireAuth
-    // would see session === null and redirect to /login before we got here.
-    navigate('/')
-    // Clears the session from localStorage and fires SIGNED_OUT, which
-    // AuthProvider hears and sets session to null.
-    await supabase.auth.signOut()
-  }
+  const { user } = useAuth()
+  const initials = getInitials(user)
 
   if (variant === 'app') {
     return (
@@ -44,7 +48,7 @@ function Nav({ variant = 'public', initials = 'MM' }) {
           <Link className="nav__avatar" to="/profile" aria-label="Your profile">
             {initials}
           </Link>
-          <button className="btn btn--secondary" type="button" onClick={handleLogout}>
+          <button className="btn btn--secondary" type="button" onClick={() => navigate('/logout')}>
             Log out
           </button>
         </div>
