@@ -4,6 +4,7 @@ import RequireAuth from './auth/RequireAuth'
 import ForgotPassword from './pages/ForgotPassword'
 import HomeFeed from './pages/HomeFeed'
 import Landing from './pages/Landing'
+import ListingDetail from './pages/ListingDetail'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
 import Sell from './pages/Sell'
@@ -29,6 +30,14 @@ function App() {
         element={
           <RequireAuth>
             <Sell />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/listings/:id"
+        element={
+          <RequireAuth>
+            <ListingDetail />
           </RequireAuth>
         }
       />

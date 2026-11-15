@@ -28,6 +28,15 @@ const PAYMENT_LABELS = {
   trade: 'Open to trade',
 }
 
+const AFFILIATION_LABELS = {
+  student: 'Student',
+  alum: 'Alum',
+}
+
+// Listing ids are UUIDs. Anything else can't match a row, and Postgres
+// rejects it with an error instead of returning nothing.
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 function timeAgo(date) {
   const minutes = Math.floor((Date.now() - new Date(date)) / 60000)
   if (minutes < 60) return `${Math.max(minutes, 1)}m ago`
@@ -72,4 +81,73 @@ export async function fetchListings() {
 
   if (error) throw error
   return data.map(toCard)
+}
+
+function formatPrice(row) {
+  if (row.is_free) return 'Free'
+  if (row.price_cents === null) return 'Trade only'
+  return `$${(row.price_cents / 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}`
+}
+
+// Shapes a database row for the listing detail page.
+function toDetail(row) {
+  const images = [...row.listing_images].sort((a, b) => a.position - b.position)
+  const seller = row.seller
+
+  return {
+    id: row.id,
+    seller_id: row.seller_id,
+    status: row.status,
+    title: row.title,
+    description: row.description,
+    price_label: formatPrice(row),
+    category: CATEGORY_LABELS[row.category],
+    condition: CONDITION_LABELS[row.condition],
+    course_code: row.course_code,
+    pickup_spot: row.campus_area,
+    posted_ago: timeAgo(row.created_at),
+    // "Open to trade" is stored as its own flag, so it's shown separately.
+    payment_methods: row.payment_methods
+      .filter((method) => method !== 'trade')
+      .map((method) => PAYMENT_LABELS[method]),
+    open_to_trade: row.open_to_trade || row.payment_methods.includes('trade'),
+    tags: row.listing_tags.map((link) => link.tags?.name).filter(Boolean),
+    images: images.map((image, index) => ({
+      url: image.url,
+      alt: image.alt_text ? `${image.alt_text}, photo ${index + 1}` : `Photo ${index + 1}`,
+    })),
+    seller: seller && {
+      name: seller.display_name,
+      avatar_url: seller.avatar_url,
+      affiliation: AFFILIATION_LABELS[seller.affiliation],
+      grad_year: seller.grad_year,
+      member_since: new Date(seller.created_at).toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      }),
+    },
+  }
+}
+
+// One listing with its photos, tags and seller, for /listings/:id.
+// Returns null when the listing doesn't exist or this user can't see it
+// (sold, deleted, or a bad link). Members only: logged-out visitors can't
+// read these columns.
+export async function fetchListing(id) {
+  if (!UUID_PATTERN.test(id)) return null
+
+  const { data, error } = await supabase
+    .from('listings')
+    .select(
+      `id, seller_id, status, title, description, price_cents, is_free, category, condition,
+       payment_methods, open_to_trade, course_code, campus_area, created_at,
+       listing_images(url, position, alt_text),
+       listing_tags(tags(name)),
+       seller:users!listings_seller_id_fkey(display_name, avatar_url, affiliation, grad_year, created_at)`,
+    )
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data && toDetail(data)
 }
