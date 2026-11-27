@@ -3,8 +3,10 @@ import { Link, useParams } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
+import ShareButton from '../components/ShareButton'
 import { fetchListing } from '../data/listings'
 import { pickupMapFor } from '../data/pickupLocations'
+import { ONLINE_PICKUP } from '../data/sellOptions'
 import './ListingDetail.css'
 
 const STATUS_NOTES = {
@@ -71,6 +73,21 @@ function Gallery({ images, category }) {
 
 function PickupMap({ spot }) {
   const map = pickupMapFor(spot)
+
+  if (spot === ONLINE_PICKUP) {
+    return (
+      <section className="detail__card" aria-labelledby="pickup-heading">
+        <h2 className="detail__section-title" id="pickup-heading">
+          Delivery
+        </h2>
+        <p className="pickup__name">{spot}</p>
+        <p className="detail__muted">
+          No meetup needed. Message the seller to arrange the transfer, and don’t pay until you’ve
+          received it.
+        </p>
+      </section>
+    )
+  }
 
   return (
     <section className="detail__card" aria-labelledby="pickup-heading">
@@ -208,7 +225,10 @@ function ListingView({ listing, isOwner }) {
         {statusNote && <p className="detail__status">{statusNote}</p>}
 
         <section className="detail__card" aria-labelledby="listing-title">
-          <p className="detail__price">{listing.price_label}</p>
+          <div className="detail__price-row">
+            <p className="detail__price">{listing.price_label}</p>
+            <ShareButton listing={listing} className="detail__share" />
+          </div>
           <h1 className="detail__title" id="listing-title">
             {listing.title}
           </h1>
@@ -220,7 +240,7 @@ function ListingView({ listing, isOwner }) {
 
           <dl className="detail__facts">
             <div>
-              <dt>Pickup spot</dt>
+              <dt>{listing.pickup_spot === ONLINE_PICKUP ? 'Delivery' : 'Pickup spot'}</dt>
               <dd>{listing.pickup_spot}</dd>
             </div>
             <div>
@@ -239,34 +259,29 @@ function ListingView({ listing, isOwner }) {
 
           {isOwner ? (
             <div className="detail__actions">
-              <button className="btn btn--primary" type="button" disabled>
+              <Link className="btn btn--primary" to={`/listings/${listing.id}/edit`}>
                 Edit listing
-              </button>
-              <div className="detail__actions-row">
-                <button className="btn btn--secondary" type="button" disabled>
-                  Mark as sold
-                </button>
-                <button className="btn btn--secondary" type="button" disabled>
-                  Delete
-                </button>
-              </div>
+              </Link>
+              <Link className="btn btn--secondary" to="/dashboard">
+                Manage in dashboard
+              </Link>
               <p className="detail__muted detail__note">
-                This is your listing. Editing and marking as sold are coming soon.
+                This is your listing. Change its status or delete it from your dashboard.
               </p>
             </div>
           ) : (
             <div className="detail__actions">
-              <button className="btn btn--primary" type="button" disabled>
+              {/* Opens the existing conversation about this listing if there is one. */}
+              <Link className="btn btn--primary" to={`/messages/new/${listing.id}`}>
                 Message seller
-              </button>
+              </Link>
               {listing.open_to_trade && (
                 <button className="btn btn--secondary" type="button" disabled>
                   Offer a trade
                 </button>
               )}
               <p className="detail__muted detail__note">
-                Messaging is coming soon. Meet in a public spot on campus and never share your
-                address.
+                Meet in a public spot on campus and never share your address.
               </p>
             </div>
           )}

@@ -61,6 +61,7 @@ function toCard(row) {
     payment_methods: payments,
     pickup_spot: row.campus_area,
     location_label: row.campus_area,
+    created_at: row.created_at,
     posted_ago: timeAgo(row.created_at),
     image_url: cover?.url,
   }

@@ -21,6 +21,7 @@ function ListingCard({ listing, className }) {
   return (
     <Link
       to={session ? `/listings/${listing.id}` : '/login'}
+      state={session ? undefined : { from: `/listings/${listing.id}` }}
       aria-label={sold ? `${listing.title} (sold)` : undefined}
       className={cn(
         'group flex min-w-0 flex-col gap-2 rounded-card border border-transparent bg-card p-2 text-foreground transition-colors',

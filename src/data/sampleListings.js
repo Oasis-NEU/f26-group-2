@@ -19,6 +19,7 @@ export const PICKUP_SPOTS = [
   'Snell Library',
   'ISEC',
   'Anywhere on campus',
+  'Online transfer',
 ]
 
 export const sampleListings = [

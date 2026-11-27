@@ -5,9 +5,7 @@ import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
 import {
   changePassword,
-  deleteListing,
   deleteMyAccount,
-  fetchMyListings,
   fetchMyProfile,
   updateMyProfile,
   uploadAvatar,
@@ -27,18 +25,6 @@ const AFFILIATIONS = [
   { value: 'student', label: 'Current student' },
   { value: 'alum', label: 'Alum' },
 ]
-
-const STATUS_LABELS = { active: 'Active', pending: 'Pending', sold: 'Sold' }
-
-function formatPrice(listing) {
-  if (listing.is_free || listing.price_cents === 0) return 'Free'
-  if (listing.price_cents == null) return 'Trade'
-  return `$${(listing.price_cents / 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}`
-}
-
-function formatDate(date) {
-  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
 
 // ── Profile details ─────────────────────────────────────────────────────────
 
@@ -254,110 +240,24 @@ function ProfileForm({ userId, profile, onSaved }) {
 
 // ── Listings ────────────────────────────────────────────────────────────────
 
-function MyListings({ userId }) {
-  const [listings, setListings] = useState(null) // null while loading
-  const [loadError, setLoadError] = useState(false)
-  const [deletingId, setDeletingId] = useState(null)
-  const [message, setMessage] = useState({ text: '', error: false })
-
-  useEffect(() => {
-    fetchMyListings(userId)
-      .then(setListings)
-      .catch((error) => {
-        console.error(error)
-        setLoadError(true)
-      })
-  }, [userId])
-
-  async function handleDelete(listing) {
-    if (!window.confirm(`Delete “${listing.title}”? This can’t be undone.`)) return
-
-    setDeletingId(listing.id)
-    setMessage({ text: '', error: false })
-    try {
-      await deleteListing(listing)
-      setListings((current) => current.filter((item) => item.id !== listing.id))
-      setMessage({ text: `Deleted “${listing.title}”.`, error: false })
-    } catch (error) {
-      console.error(error)
-      setMessage({ text: error.message || 'Couldn’t delete that listing. Try again.', error: true })
-    } finally {
-      setDeletingId(null)
-    }
-  }
-
-  let content
-  if (loadError) {
-    content = <p className="field__hint">Couldn’t load your listings. Refresh the page to try again.</p>
-  } else if (!listings) {
-    content = <p className="field__hint">Loading your listings…</p>
-  } else if (!listings.length) {
-    content = (
-      <p className="field__hint">
-        You haven’t listed anything yet. <Link to="/sell">Sell an item</Link>
-      </p>
-    )
-  } else {
-    content = (
-      <ul className="my-listings">
-        {listings.map((listing) => (
-          <li key={listing.id} className="my-listing">
-            <div className="my-listing__thumb">
-              {listing.cover_url ? <img src={listing.cover_url} alt="" /> : null}
-            </div>
-            <div className="my-listing__body">
-              <p className="my-listing__title">{listing.title}</p>
-              <p className="my-listing__meta">
-                <span className={`my-listing__status my-listing__status--${listing.status}`}>
-                  {STATUS_LABELS[listing.status] ?? listing.status}
-                </span>
-                {formatPrice(listing)} · Posted {formatDate(listing.created_at)}
-              </p>
-            </div>
-            <div className="my-listing__actions">
-              <Link
-                className="btn btn--secondary"
-                to={`/listings/${listing.id}/edit`}
-                aria-label={`Edit ${listing.title}`}
-              >
-                Edit
-              </Link>
-              {listing.status === 'sold' ? (
-                <span className="my-listing__note">Sold listings stay on record</span>
-              ) : (
-                <button
-                  className="btn btn--secondary my-listing__delete"
-                  type="button"
-                  disabled={deletingId === listing.id}
-                  aria-label={`Delete ${listing.title}`}
-                  onClick={() => handleDelete(listing)}
-                >
-                  {deletingId === listing.id ? 'Deleting…' : 'Delete'}
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )
-  }
-
+// Listings are managed on the seller dashboard. The nav link to it is hidden
+// on phones, so the profile links there too.
+function ListingsLink() {
   return (
     <section className="sell__card" aria-labelledby="profile-listings-heading">
       <div className="profile__section-head">
-        <h2 className="sell__section-title" id="profile-listings-heading">
-          Your listings
-        </h2>
-        <Link className="btn btn--primary" to="/sell">
-          Sell an item
+        <div>
+          <h2 className="sell__section-title" id="profile-listings-heading">
+            Your listings
+          </h2>
+          <p className="field__hint profile__section-hint">
+            Edit, change status, or remove listings on your seller dashboard.
+          </p>
+        </div>
+        <Link className="btn btn--secondary" to="/dashboard">
+          Open dashboard
         </Link>
       </div>
-      {message.text && (
-        <p className={message.error ? 'field__error' : 'profile__success'} role="status">
-          {message.text}
-        </p>
-      )}
-      {content}
     </section>
   )
 }
@@ -555,7 +455,7 @@ function Profile() {
           ) : (
             <>
               <ProfileForm userId={user.id} profile={profile} onSaved={setProfile} />
-              <MyListings userId={user.id} />
+              <ListingsLink />
               <PasswordForm />
               <DeleteAccount userId={user.id} avatarUrl={profile.avatar_url} />
             </>

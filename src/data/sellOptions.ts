@@ -16,8 +16,11 @@ export const SELL_CONDITIONS = ['New', 'Like new', 'Good', 'Fair', 'Old'] as con
 
 export const SELL_PAYMENT_METHODS = ['Cash', 'Zelle', 'Cash App', 'Venmo', 'Open to trades'] as const
 
+// No meetup: for tickets and other things the seller can send online.
+export const ONLINE_PICKUP = 'Online transfer'
+
 // General meeting spots only.
-export const SELL_PICKUP_SPOTS = [
+export const CAMPUS_PICKUP_SPOTS = [
   'Curry Student Center',
   'Snell Library',
   'ISEC',
@@ -32,3 +35,5 @@ export const SELL_PICKUP_SPOTS = [
   'West Village Quad',
   'Other',
 ] as const
+
+export const SELL_PICKUP_SPOTS = [ONLINE_PICKUP, ...CAMPUS_PICKUP_SPOTS] as const

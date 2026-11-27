@@ -1,12 +1,12 @@
 ---
 name: nu-exchange
-description: Theme, branding, and UI conventions for NU Exchange, the Northeastern student marketplace in this repo. Load before building or restyling any page, component, or form so new work matches the existing dark theme, color tokens, typography, layout, copy voice, and accessibility rules.
+description: Theme, branding, logo, and UI conventions for Husky Exchange (formerly NU Exchange), the Northeastern student marketplace in this repo. Load before building or restyling any page, component, or form so new work matches the existing dark theme, color tokens, typography, layout, copy voice, and accessibility rules.
 ---
 
-# NU Exchange: theme and branding
+# Husky Exchange: theme and branding
 
-NU Exchange is a campus-only marketplace where verified Northeastern students buy, sell, and trade
-in person. The look is a **simple, clean, dark marketplace**: content and photos first, very little
+Husky Exchange (renamed from "NU Exchange" in November 2026) is a campus-only marketplace where
+verified Northeastern students buy, sell, and trade in person. The look is a **simple, clean, dark marketplace**: content and photos first, very little
 decoration, with one red accent. The design should come from the content, not from effects.
 
 Before building, read `src/index.css` (tokens and shared classes) and one existing page that is close
@@ -31,19 +31,38 @@ that a token already covers.
 | `--text` | `#f5f5f5` | Body text, headings |
 | `--text-muted` | `#a3a3a3` | Secondary text, hints, meta |
 | `--text-subtle` | `#8a8a8a` | Tertiary text ("optional", counts) |
-| `--accent` | `#e0202f` | Primary button, active states, links |
-| `--accent-soft` | `rgba(224,32,47,.2)` | Tinted background for selected options |
+| `--accent` | `#c8102e` | Logo red: primary buttons, checked states, active borders, fills |
+| `--accent-soft` | `rgba(200,16,46,.2)` | Tinted background for selected options |
+| `--accent-text` | `#ff5a6a` | Red **text** on dark (links like "See all", step numbers) |
 | error text | `#ff6b6b` | Validation messages (readable on dark) |
 
 **Red is the only brand color.** Use it for the primary button, selected/checked states, the logo
-mark, and small accents. Don't use it for body text, large backgrounds, or decoration. Red text on the
-dark background is low-contrast, so keep red text rare and short (e.g. a "See all" link).
+mark, and small accents. Don't use it for body text, large backgrounds, or decoration.
 
-Northeastern's official red is **`#C8102E`**. The global `--accent` is currently `#e0202f`. The Sell
-page (`src/pages/Sell.css`) overrides `--accent` to `#C8102E` inside `.sell`. Which red is used
-app-wide is an open team decision. Until it's settled, override the token per page as Sell does;
-don't hard-code either value in components. The ink color `#1C1F26` is for light backgrounds only,
-so it isn't used in the dark theme.
+The brand red is the logo's **`#C8102E`**, set once as `--accent` in `src/index.css` and used
+app-wide (Tailwind `bg-primary`). Don't override it per page or hard-code it in components. It's too
+dark to read as text on the dark background (3.2:1 contrast), so any red *text* uses `--accent-text`
+(Tailwind `text-primary-text`) instead; keep red text rare and short. The ink color `#1C1F26` is for
+light backgrounds only (it's the logo's ink, shown on the logo's white tile).
+
+## Logo
+
+- The site is called **Husky Exchange**. Use that name in all UI text, never "NU Exchange".
+- The mark is the "HE" logo: a husky inside a dark ink **H** (`#1C1F26`) and a red **E** with an
+  arrow (`#C8102E`), from the team's Figma file "Logo and UI HE". In React, use
+  `<LogoMark />` (`src/components/LogoMark.jsx`, `size="default"` for the nav, `size="small"` for
+  the footer); it loads `src/assets/logo.svg`. The browser tab icon is `public/favicon.svg`, the same
+  mark on a light rounded square.
+- **Always put the mark on a light tile.** `LogoMark` draws it (`LogoMark.css`, background
+  `var(--text)`). The mark's ink is nearly the same color as the dark background and disappears
+  without the tile. Don't recolor the mark or make a light version without checking with the designer.
+- The footer (`src/components/Footer.jsx`) is rendered once in `App.jsx` for every page except the
+  log-in pages (`NO_FOOTER_PATHS`). Pages shouldn't render their own `<Footer />`.
+- In the nav, the mark sits next to the name "Husky Exchange" as live text (Inter, not part of the
+  image). On the logged-out nav below 480px only the mark shows; the name stays visually hidden for
+  screen readers.
+- The full stacked logo with "HUSKY EXCHANGE" lettering exists only as a PNG in Figma. Ask for an
+  SVG export before using it anywhere.
 
 ## Typography
 
@@ -144,10 +163,10 @@ state at **`/design-system`** (`src/pages/DesignSystem.jsx`). Prefer these over 
 
 ## Product and safety rules that affect UI
 
-- Users are verified Northeastern students (`@northeastern.edu`). Exchanges happen **in person
-  only**. Payment happens off-platform (Venmo, Zelle, cash, or trade); the app never takes payment.
+- Users are verified Northeastern students (`@northeastern.edu`). Exchanges happen **in person**,
+  except tickets and other things sent online (the "Online transfer" pickup option). Payment happens off-platform (Venmo, Zelle, cash, or trade); the app never takes payment.
 - **Never ask for or show an exact address.** Location is a general campus spot (Curry Student
-  Center, Snell Library, ISEC, Marino Center, …).
+  Center, Snell Library, ISEC, Marino Center, …) or "Online transfer".
 - Show trust signals (verified badge, rating, member since) wherever a seller appears.
 - Lead with photos: cards show a large image, then price, then title, then meta text.
 - Footer note: "Student project, not an official Northeastern University service." Don't use

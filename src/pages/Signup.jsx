@@ -14,6 +14,7 @@ function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
+  const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   // Set once Supabase has sent the verification email.
@@ -39,6 +40,10 @@ function Signup() {
       setError("Passwords don't match.")
       return
     }
+    if (!agreed) {
+      setError('Agree to the terms and conditions to sign up.')
+      return
+    }
 
     setSubmitting(true)
 
@@ -48,8 +53,9 @@ function Signup() {
       options: {
         // Where the verify link sends them. Must be in Supabase's Redirect URLs.
         emailRedirectTo: `${window.location.origin}/browse`,
-        // Saved on the user as user_metadata.display_name.
-        data: { display_name: name.trim() },
+        // Saved on the user as user_metadata. terms_accepted_at records when
+        // they agreed to the terms (see src/pages/Terms.jsx).
+        data: { display_name: name.trim(), terms_accepted_at: new Date().toISOString() },
       },
     })
 
@@ -155,6 +161,23 @@ function Signup() {
             value={confirm}
             onChange={(event) => setConfirm(event.target.value)}
           />
+
+          <label className="checkbox auth__terms">
+            <input
+              type="checkbox"
+              required
+              checked={agreed}
+              onChange={(event) => setAgreed(event.target.checked)}
+            />
+            <span className="checkbox__box" aria-hidden="true" />
+            <span>
+              I agree to the{' '}
+              <Link to="/terms" target="_blank" rel="noreferrer">
+                terms and conditions
+                <span className="visually-hidden"> (opens in a new tab)</span>
+              </Link>
+            </span>
+          </label>
 
           {error && (
             <p className="auth__error" role="alert">

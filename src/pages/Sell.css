@@ -1,8 +1,4 @@
-/* The sell page uses Northeastern red for its primary button and accents.
-   Overriding the tokens here keeps the change scoped to this page. */
 .sell {
-  --accent: #c8102e;
-  --accent-soft: rgba(200, 16, 46, 0.18);
   --error: #ff6b6b;
 
   display: flex;

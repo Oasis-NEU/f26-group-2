@@ -1,13 +1,22 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 
 import ResendVerification from '../auth/ResendVerification'
 import Nav from '../components/Nav'
 import { supabase } from '../supabaseClient'
 import './Login.css'
 
+// Where to go after logging in: the page that sent them here (only paths on
+// this site), or Browse.
+function returnPath(from) {
+  return typeof from === 'string' && from.startsWith('/') && !from.startsWith('//') ? from : '/browse'
+}
+
 function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from
+  const forListing = typeof from === 'string' && from.startsWith('/listings/')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -37,7 +46,7 @@ function Login() {
       setError(error.message)
       return
     }
-    navigate('/browse')
+    navigate(returnPath(from), { replace: true })
   }
 
   return (
@@ -47,6 +56,9 @@ function Login() {
       <main className="container auth">
         <form className="auth__card" onSubmit={handleSubmit}>
           <h1 className="auth__title">Log in</h1>
+          {forListing && (
+            <p className="auth__text auth__intro">Log in with your Northeastern email to see this listing.</p>
+          )}
 
           <label className="auth__label" htmlFor="login-email">
             Northeastern email
@@ -98,7 +110,7 @@ function Login() {
           {unverifiedEmail && <ResendVerification email={unverifiedEmail} />}
 
           <p className="auth__switch">
-            New to NU Exchange? <Link to="/signup">Sign up</Link>
+            New to Husky Exchange? <Link to="/signup">Sign up</Link>
           </p>
         </form>
       </main>

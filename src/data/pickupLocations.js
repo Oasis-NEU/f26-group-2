@@ -1,6 +1,6 @@
 // Pickup spot (as saved on a listing) → what to search for on the map.
-// These are general campus spots only. "Other" isn't a place, so it gets no map.
-// When a spot is added to SELL_PICKUP_SPOTS in sellOptions.ts, add it here too,
+// These are general campus spots only. "Other" and "Online transfer" aren’t places, so they get no map.
+// When a spot is added to CAMPUS_PICKUP_SPOTS in sellOptions.ts, add it here too,
 // or its listings just won't show a map.
 const CAMPUS = 'Northeastern University, Boston, MA'
 

@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { MessageCircle } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
 import { getUserInitials } from '../utils/initials'
@@ -10,7 +11,7 @@ function Logo() {
   return (
     <Link className="logo" to="/">
       <LogoMark />
-      <span className="logo__name">NU Exchange</span>
+      <span className="logo__name">Husky Exchange</span>
     </Link>
   )
 }
@@ -29,8 +30,15 @@ function Nav({ variant = 'public' }) {
           <div className="nav__search">
             <SearchBar size="compact" />
           </div>
+          <Link className="nav__link nav__link--hide-mobile" to="/dashboard">
+            Dashboard
+          </Link>
           <Link className="nav__link nav__link--hide-mobile" to="/messages">
             Messages
+          </Link>
+          {/* Phones get an icon instead of the text link. */}
+          <Link className="nav__icon-link" to="/messages" aria-label="Messages">
+            <MessageCircle size={22} aria-hidden="true" />
           </Link>
           <Link className="btn btn--primary" to="/sell">
             Sell
@@ -56,9 +64,6 @@ function Nav({ variant = 'public' }) {
           <a className="nav__link" href="#how-it-works">
             How it works
           </a>
-          <Link className="nav__link" to="/safety">
-            Safety
-          </Link>
         </nav>
         <Link className="btn btn--secondary" to="/login">
           Log in

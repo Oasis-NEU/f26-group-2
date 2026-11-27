@@ -10,12 +10,12 @@ function Footer() {
         <div className="footer__brand">
           <LogoMark size="small" />
           <p className="footer__note">
-            © 2026 NU Exchange · Student project, not an official Northeastern University service.
+            © 2026 Husky Exchange · Student project, not an official Northeastern University service.
           </p>
         </div>
         <nav className="footer__links" aria-label="Footer">
           <Link to="/about">About</Link>
-          <Link to="/safety">Safety</Link>
+          <Link to="/terms">Terms and conditions</Link>
           <Link to="/help">Help</Link>
           <Link to="/contact">Contact</Link>
         </nav>

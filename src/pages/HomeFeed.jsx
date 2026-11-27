@@ -8,8 +8,12 @@ import { fetchListings } from '../data/listings'
 import { CATEGORIES, CONDITIONS, PAYMENT_METHODS, PICKUP_SPOTS } from '../data/sampleListings'
 import './HomeFeed.css'
 
+// Cards shown at first, and how many more each "Load more" adds.
+const PAGE_SIZE = 24
+
 const SORTS = {
   newest: 'Newest first',
+  oldest: 'Oldest first',
   'price-asc': 'Price: low to high',
   'price-desc': 'Price: high to low',
 }
@@ -48,6 +52,12 @@ function HomeFeed() {
   const [payments, setPayments] = useState([])
   const [pickups, setPickups] = useState([])
   const [sort, setSort] = useState('newest')
+
+  // How many matching listings are on screen. Any filter or sort change
+  // starts back at one page; `key` records which filters the count is for.
+  const filterKey = JSON.stringify([category, query, minPrice, maxPrice, conditions, payments, pickups, sort])
+  const [page, setPage] = useState({ key: filterKey, count: PAGE_SIZE })
+  const visibleCount = page.key === filterKey ? page.count : PAGE_SIZE
 
   const [allListings, setAllListings] = useState([])
   // 'loading' | 'ready' | 'error'
@@ -93,6 +103,9 @@ function HomeFeed() {
       return true
     })
 
+    if (sort === 'oldest') {
+      return [...filtered].sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    }
     if (sort === 'price-asc') return [...filtered].sort((a, b) => a.price_cents - b.price_cents)
     if (sort === 'price-desc') return [...filtered].sort((a, b) => b.price_cents - a.price_cents)
     return filtered
@@ -205,11 +218,29 @@ function HomeFeed() {
           ) : loadState === 'error' ? (
             <p className="feed__empty">Couldn't load listings. Refresh the page to try again.</p>
           ) : listings.length ? (
-            <div className="listing-grid">
-              {listings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
-              ))}
-            </div>
+            <>
+              <div className="listing-grid">
+                {listings.slice(0, visibleCount).map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
+              {listings.length > PAGE_SIZE && (
+                <div className="feed__more">
+                  <p className="feed__shown" role="status">
+                    Showing {Math.min(visibleCount, listings.length)} of {listings.length}
+                  </p>
+                  {visibleCount < listings.length && (
+                    <button
+                      className="btn btn--secondary"
+                      type="button"
+                      onClick={() => setPage({ key: filterKey, count: visibleCount + PAGE_SIZE })}
+                    >
+                      Load more
+                    </button>
+                  )}
+                </div>
+              )}
+            </>
           ) : (
             <p className="feed__empty">No listings match these filters.</p>
           )}

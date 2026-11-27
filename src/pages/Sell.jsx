@@ -7,6 +7,8 @@ import {
   SELL_CATEGORIES,
   SELL_CONDITIONS,
   SELL_PAYMENT_METHODS,
+  CAMPUS_PICKUP_SPOTS,
+  ONLINE_PICKUP,
   SELL_PICKUP_SPOTS,
 } from '../data/sellOptions'
 import './Sell.css'
@@ -101,6 +103,9 @@ function validate(form) {
 
   if (!form.condition) errors.condition = 'Choose a condition.'
   if (!form.paymentMethods.length) errors.paymentMethods = 'Pick at least one payment method.'
+  else if (form.pickupSpot === ONLINE_PICKUP && form.paymentMethods.includes('Cash')) {
+    errors.paymentMethods = 'Cash needs a meetup. Uncheck it, or choose a spot on campus.'
+  }
   if (!form.pickupSpot) errors.pickupSpot = 'Choose a pickup spot.'
 
   return errors
@@ -355,8 +360,8 @@ function Sell() {
               {message}
             </p>
             {loadState !== 'loading' && (
-              <Link className="btn btn--secondary" to="/profile">
-                Back to your profile
+              <Link className="btn btn--secondary" to="/dashboard">
+                Back to your dashboard
               </Link>
             )}
           </section>
@@ -379,8 +384,8 @@ function Sell() {
             </h1>
             <p className="sell__subtitle">The updated listing is live on Browse.</p>
             <div className="sell__done-actions">
-              <Link className="btn btn--primary" to="/profile">
-                Back to your profile
+              <Link className="btn btn--primary" to="/dashboard">
+                Back to your dashboard
               </Link>
               <Link className="btn btn--secondary" to="/browse">
                 Back to browse
@@ -756,14 +761,21 @@ function Sell() {
                 {form.pickupSpot && !SELL_PICKUP_SPOTS.includes(form.pickupSpot) && (
                   <option value={form.pickupSpot}>{form.pickupSpot}</option>
                 )}
-                {SELL_PICKUP_SPOTS.map((spot) => (
-                  <option key={spot} value={spot}>
-                    {spot}
-                  </option>
-                ))}
+                <optgroup label="No meetup">
+                  <option value={ONLINE_PICKUP}>{ONLINE_PICKUP}</option>
+                </optgroup>
+                <optgroup label="On campus">
+                  {CAMPUS_PICKUP_SPOTS.map((spot) => (
+                    <option key={spot} value={spot}>
+                      {spot}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
               <p className="field__hint" id="sell-pickup-hint">
-                A general spot on campus. Never share your exact address.
+                {form.pickupSpot === ONLINE_PICKUP
+                  ? 'You’ll send it online, like a ticket transfer or e-ticket. No meetup needed.'
+                  : 'A general spot on campus, or Online transfer for tickets. Never share your exact address.'}
               </p>
               <FieldError field="pickupSpot" message={errors.pickupSpot} />
             </div>

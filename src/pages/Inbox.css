@@ -1,0 +1,142 @@
+.inbox {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 760px;
+  padding-block: 24px 96px;
+
+  @media (min-width: 768px) {
+    padding-block: 40px 120px;
+  }
+}
+
+.inbox__title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+}
+
+.inbox__muted {
+  color: var(--text-muted);
+}
+
+.inbox__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+  list-style: none;
+  overflow: hidden;
+}
+
+.inbox__list li + li {
+  border-top: 1px solid var(--border);
+}
+
+.inbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.inbox-row:hover {
+  background: var(--surface);
+}
+
+.inbox-row:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
+.inbox-row__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.inbox-row__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inbox-row__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.inbox-row__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.inbox-row__name {
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inbox-row__time {
+  flex-shrink: 0;
+  color: var(--text-subtle);
+  font-size: 12px;
+}
+
+.inbox-row__listing,
+.inbox-row__preview {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inbox-row__listing {
+  color: var(--text-muted);
+}
+
+.inbox-row__preview {
+  color: var(--text-subtle);
+}
+
+/* Unread: bolder text and a red dot. */
+.inbox-row--unread .inbox-row__preview {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.inbox-row--unread .inbox-row__time {
+  color: var(--text);
+}
+
+.inbox-row__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
