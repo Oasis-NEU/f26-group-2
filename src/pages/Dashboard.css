@@ -1,8 +1,5 @@
-/* Seller dashboard. Uses Northeastern red like the Sell and Profile pages. */
+/* Seller dashboard. */
 .dash {
-  --accent: #c8102e;
-  --accent-soft: rgba(200, 16, 46, 0.18);
-
   display: flex;
   flex-direction: column;
   gap: 20px;

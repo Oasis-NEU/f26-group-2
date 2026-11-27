@@ -72,7 +72,7 @@
   flex-shrink: 0;
   font-size: 15px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .section-link:hover {
@@ -120,7 +120,7 @@
   height: 32px;
   border-radius: 50%;
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 14px;
   font-weight: 700;
 }

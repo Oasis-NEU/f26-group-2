@@ -1,7 +1,4 @@
-/* Same Northeastern red as the Sell page, scoped to this page. */
 .detail {
-  --accent: #c8102e;
-
   display: flex;
   flex-direction: column;
   gap: 16px;
