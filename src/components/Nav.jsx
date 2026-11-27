@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { MessageCircle } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
 import { getUserInitials } from '../utils/initials'
@@ -36,6 +37,10 @@ function Nav({ variant = 'public' }) {
           </Link>
           <Link className="nav__link nav__link--hide-mobile" to="/messages">
             Messages
+          </Link>
+          {/* Phones get an icon instead of the text link. */}
+          <Link className="nav__icon-link" to="/messages" aria-label="Messages">
+            <MessageCircle size={22} aria-hidden="true" />
           </Link>
           <Link className="btn btn--primary" to="/sell">
             Sell

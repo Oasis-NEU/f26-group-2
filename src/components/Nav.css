@@ -95,6 +95,31 @@
   }
 }
 
+/* Messages icon: phones only; from 768px the text link shows instead. */
+.nav__icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-btn);
+  color: var(--text);
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.nav__icon-link:hover {
+  background: var(--surface);
+}
+
+.nav__icon-link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
 /* On mobile the app search drops to its own row under the logo. */
 .nav__search {
   order: 10;
@@ -136,11 +161,12 @@
   object-fit: cover;
 }
 
-/* "Husky Exchange" plus Log in and Sign up don't fit on small phones, so the
-   logged-out nav shows only the logo tile there. The name stays readable to
-   screen readers (same technique as .visually-hidden). */
+/* "Husky Exchange" doesn't fit beside Log in and Sign up (logged out) or the
+   Messages icon, Sell and avatar (logged in) on small phones, so both navs show
+   only the logo tile there. The name stays readable to screen readers (same
+   technique as .visually-hidden). */
 @media (max-width: 479px) {
-  .nav__inner:not(.nav__inner--app) .logo__name {
+  .logo__name {
     position: absolute;
     width: 1px;
     height: 1px;

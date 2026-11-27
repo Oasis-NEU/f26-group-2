@@ -2,10 +2,12 @@ import { Route, Routes } from 'react-router'
 
 import RedirectIfSignedIn from './auth/RedirectIfSignedIn'
 import RequireAuth from './auth/RequireAuth'
+import Conversation from './pages/Conversation'
 import Dashboard from './pages/Dashboard'
 import DesignSystem from './pages/DesignSystem'
 import ForgotPassword from './pages/ForgotPassword'
 import HomeFeed from './pages/HomeFeed'
+import Inbox from './pages/Inbox'
 import Landing from './pages/Landing'
 import ListingDetail from './pages/ListingDetail'
 import Login from './pages/Login'
@@ -82,6 +84,32 @@ function App() {
         element={
           <RequireAuth>
             <Profile />
+          </RequireAuth>
+        }
+      />
+      {/* Messaging: the inbox, one conversation, and a buyer's first message
+          about a listing (the conversation is created when it's sent). */}
+      <Route
+        path="/messages"
+        element={
+          <RequireAuth>
+            <Inbox />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/messages/:id"
+        element={
+          <RequireAuth>
+            <Conversation />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/messages/new/:listingId"
+        element={
+          <RequireAuth>
+            <Conversation />
           </RequireAuth>
         }
       />

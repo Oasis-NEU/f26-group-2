@@ -271,17 +271,17 @@ function ListingView({ listing, isOwner }) {
             </div>
           ) : (
             <div className="detail__actions">
-              <button className="btn btn--primary" type="button" disabled>
+              {/* Opens the existing conversation about this listing if there is one. */}
+              <Link className="btn btn--primary" to={`/messages/new/${listing.id}`}>
                 Message seller
-              </button>
+              </Link>
               {listing.open_to_trade && (
                 <button className="btn btn--secondary" type="button" disabled>
                   Offer a trade
                 </button>
               )}
               <p className="detail__muted detail__note">
-                Messaging is coming soon. Meet in a public spot on campus and never share your
-                address.
+                Meet in a public spot on campus and never share your address.
               </p>
             </div>
           )}
