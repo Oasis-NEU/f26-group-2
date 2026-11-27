@@ -2,13 +2,14 @@ import { Link } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
 import { getUserInitials } from '../utils/initials'
+import LogoMark from './LogoMark'
 import SearchBar from './SearchBar'
 import './Nav.css'
 
 function Logo() {
   return (
     <Link className="logo" to="/">
-      <span className="logo__mark">NU</span>
+      <LogoMark />
       <span className="logo__name">NU Exchange</span>
     </Link>
   )

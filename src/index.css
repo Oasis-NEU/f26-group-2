@@ -8,6 +8,11 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import 'tw-animate-css';
 
+/* These existing class names are also Tailwind utility names. Don't let Tailwind
+   generate them: `text-input` would recolor typed text, `container` would add
+   breakpoint max-widths. The project's own .text-input / .container win. */
+@source not inline('text-input container');
+
 :root {
   --bg: #121212;
   --bg-alt: #181818;
@@ -123,6 +128,13 @@
   body {
     margin: 0;
     background: var(--bg);
+    min-height: 100svh;
+  }
+
+  /* Full-height column so the footer (margin-top: auto) sits at the bottom of short pages. */
+  #root {
+    display: flex;
+    flex-direction: column;
     min-height: 100svh;
   }
 

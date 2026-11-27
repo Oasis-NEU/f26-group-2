@@ -41,20 +41,6 @@
   flex-shrink: 0;
 }
 
-.logo__mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: -0.26px;
-}
-
 .logo__name {
   color: #fff;
   font-size: 19px;

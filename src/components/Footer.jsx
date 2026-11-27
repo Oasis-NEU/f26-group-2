@@ -1,14 +1,18 @@
 import { Link } from 'react-router'
 
+import LogoMark from './LogoMark'
 import './Footer.css'
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="container footer__inner">
-        <p className="footer__note">
-          © 2026 NU Exchange · Student project, not an official Northeastern University service.
-        </p>
+        <div className="footer__brand">
+          <LogoMark size="small" />
+          <p className="footer__note">
+            © 2026 NU Exchange · Student project, not an official Northeastern University service.
+          </p>
+        </div>
         <nav className="footer__links" aria-label="Footer">
           <Link to="/about">About</Link>
           <Link to="/safety">Safety</Link>

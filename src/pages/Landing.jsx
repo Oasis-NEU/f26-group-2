@@ -1,6 +1,5 @@
 import { Link } from 'react-router'
 
-import Footer from '../components/Footer'
 import ListingCard from '../components/ListingCard'
 import Nav from '../components/Nav'
 import SearchBar from '../components/SearchBar'
@@ -104,8 +103,6 @@ function Landing() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   )
 }

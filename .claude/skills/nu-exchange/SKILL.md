@@ -104,6 +104,10 @@ state at **`/design-system`** (`src/pages/DesignSystem.jsx`). Prefer these over 
 - Tailwind runs **without its preflight reset** so existing pages are unchanged. Components must
   reset browser defaults themselves (for example `m-0 border-0 bg-transparent p-0` on a bare
   `<button>`, `block` on images), and set a border color whenever they add a border.
+- Tailwind scans every file for class names, so a plain-CSS class that happens to match a utility
+  (`text-input` = "text color: input") also gets Tailwind styles. New BEM classes are safe if they
+  use `block__element` names. If one collides, add it to the `@source not inline(...)` line at the
+  top of `src/index.css`.
 - Existing pages keep their `.css` files. Moving a page to Tailwind is fine, but do it one page at a
   time and delete the old CSS only when nothing else uses it.
 - `npx shadcn add <name>` works (`components.json`, JS, `@/` alias). The CLI may write CSS variables

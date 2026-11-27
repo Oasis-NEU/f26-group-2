@@ -1,0 +1,33 @@
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-btn);
+  background: var(--text);
+}
+
+.logo-mark__img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+/* Header: 28px on phones so the logged-out nav buttons still fit at 375px,
+   then the same 32px as the old red "NU" tile. */
+.logo-mark--default {
+  height: 28px;
+  padding: 4px 6px;
+
+  @media (min-width: 768px) {
+    height: 32px;
+    padding: 5px 7px;
+  }
+}
+
+/* Footer: smaller, next to the copyright note. */
+.logo-mark--small {
+  height: 24px;
+  padding: 4px 5px;
+  border-radius: 6px;
+}

@@ -1,4 +1,7 @@
 .footer {
+  /* #root is a full-height flex column, so this keeps the footer at the
+     bottom of the screen on short pages. */
+  margin-top: auto;
   border-top: 1px solid var(--border);
   background: var(--bg);
   color: var(--text-subtle);
@@ -16,6 +19,12 @@
     justify-content: space-between;
     gap: 24px;
   }
+}
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .footer__note {
