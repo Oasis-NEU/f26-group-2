@@ -1,8 +1,8 @@
 import { supabase } from '../supabaseClient'
+import { fetchMyListings, removeListingPhotos } from './myListings'
 import { fileExtension, pathFromPublicUrl } from './storagePaths'
 
 const AVATAR_BUCKET = 'avatars'
-const LISTING_BUCKET = 'listing-images'
 
 // The columns a user may read and change on their own profile. The database
 // only lets users update display_name, avatar_url, grad_year, and affiliation.
@@ -51,35 +51,6 @@ export async function updateMyProfile(userId, changes, previousAvatarUrl) {
   }
 
   return data
-}
-
-// Everything the user is selling or has sold, newest first.
-export async function fetchMyListings(userId) {
-  const { data, error } = await supabase
-    .from('listings')
-    .select('id, title, price_cents, is_free, status, created_at, listing_images(url, position)')
-    .eq('seller_id', userId)
-    .order('created_at', { ascending: false })
-  if (error) throw error
-
-  return data.map((row) => {
-    const images = [...row.listing_images].sort((a, b) => a.position - b.position)
-    return { ...row, cover_url: images[0]?.url ?? null, image_urls: images.map((image) => image.url) }
-  })
-}
-
-async function removeListingPhotos(urls) {
-  const paths = urls.map((url) => pathFromPublicUrl(LISTING_BUCKET, url)).filter(Boolean)
-  if (paths.length) await supabase.storage.from(LISTING_BUCKET).remove(paths)
-}
-
-// Deletes one listing and its photos. The database refuses to delete sold
-// listings (they keep the buyer's review history), so this throws for those.
-export async function deleteListing(listing) {
-  const { data, error } = await supabase.from('listings').delete().eq('id', listing.id).select('id')
-  if (error) throw error
-  if (!data.length) throw new Error('This listing can’t be deleted. Sold listings stay on record.')
-  await removeListingPhotos(listing.image_urls)
 }
 
 // Permanently deletes the account: photos first (only the owner can remove

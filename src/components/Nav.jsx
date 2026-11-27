@@ -28,6 +28,9 @@ function Nav({ variant = 'public' }) {
           <div className="nav__search">
             <SearchBar size="compact" />
           </div>
+          <Link className="nav__link nav__link--hide-mobile" to="/dashboard">
+            Dashboard
+          </Link>
           <Link className="nav__link nav__link--hide-mobile" to="/messages">
             Messages
           </Link>

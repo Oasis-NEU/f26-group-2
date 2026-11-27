@@ -355,8 +355,8 @@ function Sell() {
               {message}
             </p>
             {loadState !== 'loading' && (
-              <Link className="btn btn--secondary" to="/profile">
-                Back to your profile
+              <Link className="btn btn--secondary" to="/dashboard">
+                Back to your dashboard
               </Link>
             )}
           </section>
@@ -379,8 +379,8 @@ function Sell() {
             </h1>
             <p className="sell__subtitle">The updated listing is live on Browse.</p>
             <div className="sell__done-actions">
-              <Link className="btn btn--primary" to="/profile">
-                Back to your profile
+              <Link className="btn btn--primary" to="/dashboard">
+                Back to your dashboard
               </Link>
               <Link className="btn btn--secondary" to="/browse">
                 Back to browse

@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router'
 
 import RedirectIfSignedIn from './auth/RedirectIfSignedIn'
 import RequireAuth from './auth/RequireAuth'
+import Dashboard from './pages/Dashboard'
 import DesignSystem from './pages/DesignSystem'
 import ForgotPassword from './pages/ForgotPassword'
 import HomeFeed from './pages/HomeFeed'
@@ -62,6 +63,15 @@ function App() {
         element={
           <RequireAuth>
             <Sell />
+          </RequireAuth>
+        }
+      />
+      {/* Seller dashboard: manage your own listings. */}
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <Dashboard />
           </RequireAuth>
         }
       />
