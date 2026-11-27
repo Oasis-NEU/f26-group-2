@@ -28,8 +28,12 @@
   --text-muted: #a3a3a3;
   --text-subtle: #8a8a8a;
 
-  --accent: #e0202f;
-  --accent-soft: rgba(224, 32, 47, 0.2);
+  /* Logo red (#C8102E). For buttons, fills and borders; white text on it is 5.9:1. */
+  --accent: #c8102e;
+  --accent-soft: rgba(200, 16, 46, 0.2);
+  /* The logo red is too dark to read as text on the dark background (3.2:1),
+     so red text (links, numbers) uses this lighter tint instead (6.2:1). */
+  --accent-text: #ff5a6a;
 
   --success: #1e7a4f;
   --warning: #b26b00;
@@ -100,6 +104,7 @@
   --color-primary: var(--accent);
   --color-primary-foreground: #fff;
   --color-primary-soft: var(--accent-soft);
+  --color-primary-text: var(--accent-text);
   --color-secondary: var(--surface);
   --color-secondary-foreground: var(--text);
   --color-muted: var(--surface-2);
