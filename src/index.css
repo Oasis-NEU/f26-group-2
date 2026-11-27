@@ -1,3 +1,13 @@
+/*
+ * Tailwind is loaded WITHOUT its preflight reset so the existing page CSS keeps
+ * rendering exactly as before. Layer order: theme < base < components < utilities,
+ * and any unlayered CSS (the page .css files, .btn, .chip …) wins over all of them.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import 'tw-animate-css';
+
 :root {
   --bg: #121212;
   --bg-alt: #181818;
@@ -14,6 +24,10 @@
 
   --accent: #e0202f;
   --accent-soft: rgba(224, 32, 47, 0.2);
+
+  --success: #1e7a4f;
+  --warning: #b26b00;
+  --danger-text: #ff6b6b;
 
   --radius-card: 12px;
   --radius-btn: 8px;
@@ -35,35 +49,101 @@
   }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/*
+ * Design-system tokens for Tailwind (used by src/components/ui and the core
+ * components). Names follow shadcn/ui, so `bg-primary`, `text-muted-foreground`,
+ * `border-border` … all resolve to the dark-theme variables above.
+ *
+ * Type scale  text-page 28 · text-section 20 · text-price 18 · text-body 16 · text-small 13
+ * Radius      rounded-card 12 px · rounded-control 8 px · rounded-full for tags
+ * Spacing     8 px grid: Tailwind's unit is 4 px, so use even steps (p-2 = 8, p-4 = 16 …)
+ * Breakpoints sm 640 px · lg 1024 px (listing grid: 2 → 3 → 4 columns)
+ */
+@theme inline {
+  --font-sans: var(--sans);
+
+  --text-page: 28px;
+  --text-page--line-height: 36px;
+  --text-page--font-weight: 700;
+  --text-page--letter-spacing: -0.02em;
+  --text-section: 20px;
+  --text-section--line-height: 28px;
+  --text-section--font-weight: 600;
+  --text-section--letter-spacing: -0.01em;
+  --text-price: 18px;
+  --text-price--line-height: 24px;
+  --text-price--font-weight: 700;
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+  --text-body--font-weight: 400;
+  --text-small: 13px;
+  --text-small--line-height: 16px;
+  --text-small--font-weight: 500;
+
+  /* Same values as --radius-card / --radius-btn in :root above. */
+  --radius-card: 12px;
+  --radius-control: 8px;
+
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-panel: var(--bg-alt);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--bg-alt);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--accent);
+  --color-primary-foreground: #fff;
+  --color-primary-soft: var(--accent-soft);
+  --color-secondary: var(--surface);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-muted);
+  --color-subtle-foreground: var(--text-subtle);
+  --color-accent: var(--surface-2);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--danger-text);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--border);
+  --color-control: var(--control-border);
+  --color-avatar: var(--avatar-bg);
+  --color-ring: var(--text);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
 }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  min-height: 100svh;
-}
+/* Global element rules sit in the base layer so Tailwind utilities can override them. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-h1,
-h2,
-h3,
-p {
-  margin: 0;
-}
+  body {
+    margin: 0;
+    background: var(--bg);
+    min-height: 100svh;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
 
-button,
-input,
-select {
-  font: inherit;
-  color: inherit;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+    color: inherit;
+  }
 }
 
 .container {
@@ -134,7 +214,7 @@ select {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px 12px;
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 32px 24px;
   }

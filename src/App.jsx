@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router'
 
 import RedirectIfSignedIn from './auth/RedirectIfSignedIn'
 import RequireAuth from './auth/RequireAuth'
+import DesignSystem from './pages/DesignSystem'
 import ForgotPassword from './pages/ForgotPassword'
 import HomeFeed from './pages/HomeFeed'
 import Landing from './pages/Landing'
@@ -35,6 +36,8 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       {/* Logged-out visitors see card info only; details need a login. */}
       <Route path="/browse" element={<HomeFeed />} />
+      {/* Component reference for the team; not linked from the app. */}
+      <Route path="/design-system" element={<DesignSystem />} />
 
       {/* Protected: only logged-in, verified users */}
       <Route

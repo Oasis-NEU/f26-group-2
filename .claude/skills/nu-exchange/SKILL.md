@@ -64,7 +64,7 @@ so it isn't used in the dark theme.
 - `.container` gives the page gutter (`--gutter`: 16px mobile, 64px desktop) and a 1440px max width.
   Forms sit in a single centered column, about 400px for auth and 640px for longer forms.
 - Tap targets at least 44px tall on mobile.
-- Listing grids use `.listing-grid` (2 columns mobile, 3 tablet, 4 desktop).
+- Listing grids use `.listing-grid` (2 columns under 640px, 3 from 640px, 4 from 1024px).
 
 ## Shared building blocks (reuse them)
 
@@ -76,6 +76,39 @@ so it isn't used in the dark theme.
 - Navigation: `<Nav variant="app" />` for signed-in pages, `<Nav variant="public" />` for logged-out ones.
 - Option lists (categories, conditions, payment methods, pickup spots) live in constants files
   (`src/data/sellOptions.ts`, `src/data/sampleListings.js`). Don't inline them in components.
+
+## Design-system components (Tailwind + shadcn/ui)
+
+Tailwind v4 and shadcn/ui-style components are set up for the core UI. See every component and
+state at **`/design-system`** (`src/pages/DesignSystem.jsx`). Prefer these over writing new CSS:
+
+| Need | Use |
+|---|---|
+| Button (primary / secondary / destructive / ghost / link, `loading`, `disabled`) | `@/components/ui/button` |
+| Text input | `@/components/ui/input` |
+| Checkbox | `@/components/ui/checkbox` |
+| Modal (Esc and click outside close it) | `@/components/ui/dialog` |
+| Bottom sheet | `@/components/ui/sheet` |
+| Toast | `import { toast } from 'sonner'` (`<Toaster />` is already in `main.jsx`) |
+| Listing card (default / hover / sold) | `@/components/ListingCard` |
+| Tag chip (clickable, removable) | `@/components/TagChip` |
+| Seller badge | `@/components/SellerBadge` |
+| Filter panel (side panel ≥1024px, bottom sheet below) | `@/components/FilterPanel` |
+| Empty state | `@/components/EmptyState` |
+
+- Tailwind tokens map onto the CSS variables above (`bg-primary` → `--accent`, `bg-card` →
+  `--surface`, `text-muted-foreground` → `--text-muted`, `border-border`, `bg-success`, …).
+  Type scale: `text-page` 28, `text-section` 20, `text-price` 18, `text-body` 16, `text-small` 13.
+  Radius: `rounded-card` 12px, `rounded-control` 8px, `rounded-full`. Use even spacing steps
+  (`p-2` = 8px, `p-4` = 16px) to stay on the 8px grid. Breakpoints: `sm` 640px, `lg` 1024px.
+- Tailwind runs **without its preflight reset** so existing pages are unchanged. Components must
+  reset browser defaults themselves (for example `m-0 border-0 bg-transparent p-0` on a bare
+  `<button>`, `block` on images), and set a border color whenever they add a border.
+- Existing pages keep their `.css` files. Moving a page to Tailwind is fine, but do it one page at a
+  time and delete the old CSS only when nothing else uses it.
+- `npx shadcn add <name>` works (`components.json`, JS, `@/` alias). The CLI may write CSS variables
+  such as `--accent` and `--border` into `src/index.css`, which would break the dark theme. Revert
+  those lines and keep only the new component file.
 
 ## Code conventions
 
