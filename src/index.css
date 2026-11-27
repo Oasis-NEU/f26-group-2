@@ -8,6 +8,12 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import 'tw-animate-css';
 
+/* The app's `.text-input` class (HomeFeed.css) has the same name as Tailwind's
+   text color utility for the `input` token below. Without this line Tailwind
+   generates `.text-input { color: var(--border) }`, which makes typed text in
+   every input nearly invisible. */
+@source not inline('text-input');
+
 :root {
   --bg: #121212;
   --bg-alt: #181818;

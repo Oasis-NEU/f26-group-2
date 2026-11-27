@@ -47,11 +47,12 @@ export async function updateListingStatus(id, status) {
   return data
 }
 
-// Deletes one listing and its photos. The database refuses to delete sold
-// listings (they keep the buyer's review history), so this throws for those.
+// Deletes one listing (any status, sold included) and its photos. Listings
+// are never deleted automatically; only the seller does this. A review of a
+// sold listing stays on the seller's profile.
 export async function deleteListing(listing) {
   const { data, error } = await supabase.from('listings').delete().eq('id', listing.id).select('id')
   if (error) throw error
-  if (!data.length) throw new Error('This listing can’t be deleted. Sold listings stay on record.')
+  if (!data.length) throw new Error('Couldn’t delete this listing. Refresh the page and try again.')
   await removeListingPhotos(listing.image_urls)
 }

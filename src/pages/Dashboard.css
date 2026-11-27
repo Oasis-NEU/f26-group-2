@@ -27,7 +27,7 @@
 
   @media (min-width: 640px) {
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
 
     .btn {
@@ -38,7 +38,6 @@
 }
 
 .dash__title {
-  margin-bottom: 6px;
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -240,7 +239,7 @@
   gap: 8px;
   grid-column: 1 / -1;
 
-  /* Fixed width so rows line up whether or not they have a Delete button. */
+  /* Fixed width so every row's controls line up. */
   @media (min-width: 768px) {
     flex-wrap: nowrap;
     grid-column: auto;

@@ -22,7 +22,7 @@ import './Dashboard.css'
 const STATUSES = [
   { value: 'active', label: 'Active', hint: 'On Browse for everyone to see.' },
   { value: 'pending', label: 'Pending', hint: 'Hidden from Browse while you arrange a pickup.' },
-  { value: 'sold', label: 'Sold', hint: 'Off Browse for good. Sold listings can’t be deleted.' },
+  { value: 'sold', label: 'Sold', hint: 'Off Browse. They stay here until you delete them.' },
 ]
 
 const STATUS_LABELS = Object.fromEntries(STATUSES.map((status) => [status.value, status.label]))
@@ -125,17 +125,15 @@ function ListingRow({ listing, busy, onStatusChange, onDelete }) {
           >
             Edit
           </Link>
-          {listing.status !== 'sold' && (
-            <button
-              className="btn btn--secondary dash-listing__delete"
-              type="button"
-              disabled={busy}
-              aria-label={`Delete ${listing.title}`}
-              onClick={() => onDelete(listing)}
-            >
-              Delete
-            </button>
-          )}
+          <button
+            className="btn btn--secondary dash-listing__delete"
+            type="button"
+            disabled={busy}
+            aria-label={`Delete ${listing.title}`}
+            onClick={() => onDelete(listing)}
+          >
+            Delete
+          </button>
         </div>
       </div>
     </li>
@@ -148,6 +146,10 @@ function ListingRow({ listing, busy, onStatusChange, onDelete }) {
 function ConfirmDialog({ action, busy, onConfirm, onCancel }) {
   const isDelete = action?.type === 'delete'
   const title = action?.listing.title
+  const deleteText =
+    action?.listing.status === 'sold'
+      ? `“${title}”, its photos, and messages about it will be deleted. Any review of the sale stays on your profile. This can’t be undone.`
+      : `“${title}”, its photos, and messages about it will be deleted. This can’t be undone.`
 
   return (
     <Dialog open={Boolean(action)} onOpenChange={(open) => !open && !busy && onCancel()}>
@@ -156,8 +158,8 @@ function ConfirmDialog({ action, busy, onConfirm, onCancel }) {
           <DialogTitle>{isDelete ? 'Delete this listing?' : 'Mark as sold?'}</DialogTitle>
           <DialogDescription>
             {isDelete
-              ? `“${title}” and its photos will be deleted. This can’t be undone.`
-              : `“${title}” will come off Browse, and sold listings can’t be deleted. You can set it back to active later if you need to.`}
+              ? deleteText
+              : `“${title}” will come off Browse. It stays on your dashboard until you delete it, and you can set it back to active if the sale falls through.`}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -318,10 +320,7 @@ function Dashboard() {
 
       <main className="container dash">
         <header className="dash__header">
-          <div>
-            <h1 className="dash__title">Seller dashboard</h1>
-            <p className="dash__muted">Edit your listings, change their status, or remove them.</p>
-          </div>
+          <h1 className="dash__title">Seller dashboard</h1>
           <Link className="btn btn--primary" to="/sell">
             Sell an item
           </Link>

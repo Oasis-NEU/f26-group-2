@@ -140,10 +140,10 @@ state at **`/design-system`** (`src/pages/DesignSystem.jsx`). Prefer these over 
 
 ## Product and safety rules that affect UI
 
-- Users are verified Northeastern students (`@northeastern.edu`). Exchanges happen **in person
-  only**. Payment happens off-platform (Venmo, Zelle, cash, or trade); the app never takes payment.
+- Users are verified Northeastern students (`@northeastern.edu`). Exchanges happen **in person**,
+  except tickets and other things sent online (the "Online transfer" pickup option). Payment happens off-platform (Venmo, Zelle, cash, or trade); the app never takes payment.
 - **Never ask for or show an exact address.** Location is a general campus spot (Curry Student
-  Center, Snell Library, ISEC, Marino Center, …).
+  Center, Snell Library, ISEC, Marino Center, …) or "Online transfer".
 - Show trust signals (verified badge, rating, member since) wherever a seller appears.
 - Lead with photos: cards show a large image, then price, then title, then meta text.
 - Footer note: "Student project, not an official Northeastern University service." Don't use

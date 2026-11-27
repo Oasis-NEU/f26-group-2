@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
 import { fetchListing } from '../data/listings'
 import { pickupMapFor } from '../data/pickupLocations'
+import { ONLINE_PICKUP } from '../data/sellOptions'
 import './ListingDetail.css'
 
 const STATUS_NOTES = {
@@ -71,6 +72,21 @@ function Gallery({ images, category }) {
 
 function PickupMap({ spot }) {
   const map = pickupMapFor(spot)
+
+  if (spot === ONLINE_PICKUP) {
+    return (
+      <section className="detail__card" aria-labelledby="pickup-heading">
+        <h2 className="detail__section-title" id="pickup-heading">
+          Delivery
+        </h2>
+        <p className="pickup__name">{spot}</p>
+        <p className="detail__muted">
+          No meetup needed. Message the seller to arrange the transfer, and don’t pay until you’ve
+          received it.
+        </p>
+      </section>
+    )
+  }
 
   return (
     <section className="detail__card" aria-labelledby="pickup-heading">
@@ -220,7 +236,7 @@ function ListingView({ listing, isOwner }) {
 
           <dl className="detail__facts">
             <div>
-              <dt>Pickup spot</dt>
+              <dt>{listing.pickup_spot === ONLINE_PICKUP ? 'Delivery' : 'Pickup spot'}</dt>
               <dd>{listing.pickup_spot}</dd>
             </div>
             <div>
