@@ -14,6 +14,7 @@ import Profile from './pages/Profile'
 import ResetPassword from './pages/ResetPassword'
 import Sell from './pages/Sell'
 import Signup from './pages/Signup'
+import Terms from './pages/Terms'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
       {/* Not wrapped in RequireAuth: the reset link logs the user in on arrival,
           and the page shows its own message when the link is bad. */}
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/terms" element={<Terms />} />
       {/* Logged-out visitors see card info only; details need a login. */}
       <Route path="/browse" element={<HomeFeed />} />
       {/* Component reference for the team; not linked from the app. */}

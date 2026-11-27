@@ -2,14 +2,17 @@ import { Link } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
 import { getUserInitials } from '../utils/initials'
+import LogoMark from './LogoMark'
 import SearchBar from './SearchBar'
 import './Nav.css'
 
 function Logo() {
   return (
     <Link className="logo" to="/">
-      <span className="logo__mark">NU</span>
-      <span className="logo__name">NU Exchange</span>
+      <span className="logo__mark">
+        <LogoMark />
+      </span>
+      <span className="logo__name">Husky Exchange</span>
     </Link>
   )
 }
@@ -58,9 +61,6 @@ function Nav({ variant = 'public' }) {
           <a className="nav__link" href="#how-it-works">
             How it works
           </a>
-          <Link className="nav__link" to="/safety">
-            Safety
-          </Link>
         </nav>
         <Link className="btn btn--secondary" to="/login">
           Log in

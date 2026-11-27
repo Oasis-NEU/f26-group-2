@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
+import ShareButton from '../components/ShareButton'
 import { fetchListing } from '../data/listings'
 import { pickupMapFor } from '../data/pickupLocations'
 import { ONLINE_PICKUP } from '../data/sellOptions'
@@ -224,7 +225,10 @@ function ListingView({ listing, isOwner }) {
         {statusNote && <p className="detail__status">{statusNote}</p>}
 
         <section className="detail__card" aria-labelledby="listing-title">
-          <p className="detail__price">{listing.price_label}</p>
+          <div className="detail__price-row">
+            <p className="detail__price">{listing.price_label}</p>
+            <ShareButton listing={listing} className="detail__share" />
+          </div>
           <h1 className="detail__title" id="listing-title">
             {listing.title}
           </h1>

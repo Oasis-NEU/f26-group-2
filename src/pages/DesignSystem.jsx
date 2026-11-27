@@ -62,7 +62,7 @@ function DesignSystem() {
   return (
     <main className="container flex flex-col gap-10 py-12 text-foreground">
       <header className="flex flex-col gap-2">
-        <h1 className="text-page">NU Exchange design system</h1>
+        <h1 className="text-page">Husky Exchange design system</h1>
         <p className="text-body text-muted-foreground">
           Tokens live in <code>src/index.css</code>. Shared pieces live in{' '}
           <code>src/components/ui</code> and <code>src/components</code>.

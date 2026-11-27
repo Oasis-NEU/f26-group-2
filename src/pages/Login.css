@@ -69,3 +69,26 @@
     color: var(--text);
   }
 }
+
+/* "I agree to the terms" checkbox on sign up. Base styles: .checkbox in HomeFeed.css. */
+.auth__terms {
+  align-items: flex-start;
+  margin-top: 16px;
+  line-height: 1.4;
+
+  .checkbox__box {
+    margin-top: 2px;
+  }
+
+  a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* "Log in to see this listing" under the title. */
+.auth__intro {
+  margin-top: -8px;
+  margin-bottom: 8px;
+}

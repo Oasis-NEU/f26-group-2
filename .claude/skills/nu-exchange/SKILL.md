@@ -1,11 +1,11 @@
 ---
 name: nu-exchange
-description: Theme, branding, and UI conventions for NU Exchange, the Northeastern student marketplace in this repo. Load before building or restyling any page, component, or form so new work matches the existing dark theme, color tokens, typography, layout, copy voice, and accessibility rules.
+description: Theme, branding, and UI conventions for Husky Exchange, the Northeastern student marketplace in this repo. Load before building or restyling any page, component, or form so new work matches the existing dark theme, color tokens, typography, layout, copy voice, and accessibility rules.
 ---
 
-# NU Exchange: theme and branding
+# Husky Exchange: theme and branding
 
-NU Exchange is a campus-only marketplace where verified Northeastern students buy, sell, and trade
+Husky Exchange is a campus-only marketplace where verified Northeastern students buy, sell, and trade
 in person. The look is a **simple, clean, dark marketplace**: content and photos first, very little
 decoration, with one red accent. The design should come from the content, not from effects.
 

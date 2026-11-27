@@ -412,3 +412,29 @@
   font-size: 22px;
   font-weight: 700;
 }
+
+/* Price with the Share button on the right. */
+.detail__price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detail__share {
+  flex-shrink: 0;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 14px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+}
