@@ -1,0 +1,289 @@
+/* The page fills the screen so the message box sits at the bottom even when a
+   conversation is short. */
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.chat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+  padding-top: 16px;
+
+  @media (min-width: 768px) {
+    padding-top: 24px;
+  }
+}
+
+.chat__back {
+  align-self: flex-start;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chat__back:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.chat__back:focus-visible,
+.chat__listing:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-radius: var(--radius-btn);
+}
+
+.chat__muted {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chat__error {
+  color: var(--danger-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chat__notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+}
+
+/* Header: who you're talking to, and the listing pinned under it. */
+
+.chat__header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chat__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  overflow-wrap: anywhere;
+}
+
+.chat__role {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.chat__listing {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+}
+
+.chat__listing:hover {
+  border-color: var(--border-strong);
+}
+
+.chat__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.chat__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chat__listing-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.chat__listing-title {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat__listing-meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Messages */
+
+.chat__messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat__empty {
+  flex: 1;
+  padding-block: 24px;
+}
+
+.bubble-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.bubble-row--mine {
+  align-items: flex-end;
+}
+
+.bubble {
+  max-width: min(80%, 520px);
+  padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+  font-size: 15px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.bubble-row--mine .bubble {
+  border-color: transparent;
+  background: var(--border-strong);
+}
+
+.bubble-row__time {
+  margin-bottom: 8px;
+  padding-inline: 4px;
+  color: var(--text-subtle);
+  font-size: 12px;
+}
+
+/* Composer: stays at the bottom of the screen while you scroll. */
+
+.chat__composer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-block: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.chat__starter {
+  align-self: flex-start;
+}
+
+.chat__starter:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.chat__label {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.chat__input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Grows with the text up to about six lines. */
+.chat .chat__input {
+  flex: 1;
+  height: auto;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  color: inherit;
+  resize: none;
+  field-sizing: content;
+}
+
+.chat .chat__input:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+.chat .chat__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat__send {
+  gap: 6px;
+  height: 44px;
+  padding-block: 0;
+}
+
+.chat__send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.chat__send:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.chat__count,
+.chat__hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chat__count {
+  align-self: flex-end;
+  font-variant-numeric: tabular-nums;
+}
