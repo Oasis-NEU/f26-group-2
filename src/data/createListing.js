@@ -27,6 +27,8 @@ const PAYMENT_VALUES = {
   Zelle: 'zelle',
   'Cash App': 'cashapp',
   Venmo: 'venmo',
+  PayPal: 'paypal',
+  'Apple Cash': 'apple_cash',
   'Open to trades': 'trade',
 }
 

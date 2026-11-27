@@ -25,6 +25,8 @@ const PAYMENT_LABELS = {
   venmo: 'Venmo',
   zelle: 'Zelle',
   cashapp: 'Cash App',
+  paypal: 'PayPal',
+  apple_cash: 'Apple Cash',
   trade: 'Open to trade',
 }
 

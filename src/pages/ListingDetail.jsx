@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useSearchParams } from 'react-router'
 
 import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
 import ShareButton from '../components/ShareButton'
+import TradeOfferButton from '../components/TradeOfferButton'
 import { fetchListing } from '../data/listings'
 import { pickupMapFor } from '../data/pickupLocations'
 import { ONLINE_PICKUP } from '../data/sellOptions'
@@ -215,6 +216,8 @@ function ListingDetail() {
 }
 
 function ListingView({ listing, isOwner }) {
+  const [searchParams] = useSearchParams()
+  const offerRequested = searchParams.get('offer') === '1'
   const statusNote = isOwner && STATUS_NOTES[listing.status]
 
   return (
@@ -275,10 +278,9 @@ function ListingView({ listing, isOwner }) {
               <Link className="btn btn--primary" to={`/messages/new/${listing.id}`}>
                 Message seller
               </Link>
-              {listing.open_to_trade && (
-                <button className="btn btn--secondary" type="button" disabled>
-                  Offer a trade
-                </button>
+              {/* ?offer=1 (from "Make a new offer" in Messages) opens the form. */}
+              {listing.open_to_trade && listing.status === 'active' && (
+                <TradeOfferButton listing={listing} startOpen={offerRequested} />
               )}
               <p className="detail__muted detail__note">
                 Meet in a public spot on campus and never share your address.

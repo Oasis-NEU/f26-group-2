@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Send } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
 import Nav from '../components/Nav'
+import TradeOfferCard from '../components/TradeOfferCard'
 import {
   MAX_MESSAGE_LENGTH,
   fetchConversation,
@@ -17,6 +18,7 @@ import {
   startConversation,
   toDate,
 } from '../data/messages'
+import { DEFAULT_DECLINE_BODY } from '../data/tradeOffers'
 import { getInitials } from '../utils/initials'
 import './Conversation.css'
 
@@ -28,6 +30,7 @@ const GROUP_GAP_MS = 5 * 60 * 1000
 const COUNTER_FROM = MAX_MESSAGE_LENGTH - 200
 const STARTER = 'Hi! Is this still available?'
 const STATUS_LABELS = { pending: 'Pending', sold: 'Sold' }
+const OFFER_EVENT_VERBS = { accepted: 'accepted', declined: 'declined', withdrawn: 'withdrew' }
 
 // Adds messages to the list without duplicates, oldest first. Timestamps are
 // all UTC in the same format, so comparing the strings sorts them correctly.
@@ -175,6 +178,33 @@ function Chat({ conversationId, listingId }) {
 
   const canSend = ready && (!isNew || conversation.listing.status === 'active')
 
+  // Each trade offer's latest state. Every message about an offer carries the
+  // offer as it was when loaded, so the newest one wins.
+  const offersById = useMemo(() => {
+    const byId = {}
+    for (const message of messages) {
+      if (message.trade_offer) byId[message.trade_offer.id] = message.trade_offer
+    }
+    return byId
+  }, [messages])
+
+  // After accepting, declining, or withdrawing: the database has posted a
+  // message about it, so fetch it now instead of waiting for the next poll.
+  async function handleOfferChanged(status) {
+    if (status === 'accepted') {
+      setPage((current) => ({
+        ...current,
+        conversation: { ...current.conversation, listing: { ...current.conversation.listing, status: 'pending' } },
+      }))
+    }
+    try {
+      const fresh = await fetchNewMessages(conversationId, lastAtRef.current ?? '1970-01-01T00:00:00Z')
+      if (fresh.length) setPage((current) => ({ ...current, messages: mergeMessages(current.messages, fresh) }))
+    } catch (error) {
+      console.error(error.cause ?? error)
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault()
     const text = draft.trim()
@@ -268,6 +298,47 @@ function Chat({ conversationId, listingId }) {
             {messages.map((message, index) => {
               const mine = message.sender_id === user.id
               const next = messages[index + 1]
+              const offer = message.trade_offer_id && offersById[message.trade_offer_id]
+
+              // The offer itself: a card with accept / decline / withdraw.
+              if (message.offer_event === 'offered' && offer) {
+                return (
+                  <li key={message.id} className={`bubble-row${mine ? ' bubble-row--mine' : ''}`}>
+                    <TradeOfferCard
+                      offer={offer}
+                      role={conversation.role}
+                      otherName={otherName}
+                      listing={conversation.listing}
+                      onChanged={handleOfferChanged}
+                    />
+                    <time className="bubble-row__time" dateTime={message.created_at}>
+                      {formatMessageTime(message.created_at)}
+                    </time>
+                  </li>
+                )
+              }
+
+              // An answer to an offer: a short line, plus the seller's note if
+              // they declined with one.
+              if (OFFER_EVENT_VERBS[message.offer_event]) {
+                const who = mine ? 'You' : otherName
+                const hasNote = message.offer_event === 'declined' && message.body !== DEFAULT_DECLINE_BODY
+                return (
+                  <li key={message.id} className={`bubble-row${mine ? ' bubble-row--mine' : ''}`}>
+                    <p className="offer-event">
+                      {who} {OFFER_EVENT_VERBS[message.offer_event]} the trade offer ·{' '}
+                      <time dateTime={message.created_at}>{formatMessageTime(message.created_at)}</time>
+                    </p>
+                    {hasNote && (
+                      <p className="bubble">
+                        <span className="visually-hidden">{who}: </span>
+                        {message.body}
+                      </p>
+                    )}
+                  </li>
+                )
+              }
+
               const showTime =
                 !next ||
                 next.sender_id !== message.sender_id ||

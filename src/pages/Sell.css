@@ -360,6 +360,11 @@ legend.field__label {
   outline-offset: 2px;
 }
 
+/* No photos yet on submit. */
+.photo-grid__add:has(input[aria-invalid='true']) .photo-picker {
+  border-color: var(--error);
+}
+
 .photo-picker--disabled {
   opacity: 0.5;
   cursor: not-allowed;

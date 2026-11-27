@@ -14,7 +14,15 @@ export const SELL_CATEGORIES = [
 
 export const SELL_CONDITIONS = ['New', 'Like new', 'Good', 'Fair', 'Old'] as const
 
-export const SELL_PAYMENT_METHODS = ['Cash', 'Zelle', 'Cash App', 'Venmo', 'Open to trades'] as const
+export const SELL_PAYMENT_METHODS = [
+  'Cash',
+  'Zelle',
+  'Cash App',
+  'Venmo',
+  'PayPal',
+  'Apple Cash',
+  'Open to trades',
+] as const
 
 // No meetup: for tickets and other things the seller can send online.
 export const ONLINE_PICKUP = 'Online transfer'

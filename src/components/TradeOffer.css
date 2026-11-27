@@ -1,0 +1,382 @@
+/* "Offer a trade" button and its form (in a dialog). */
+
+.trade-button {
+  gap: 8px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.offer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.offer-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.offer-form__label {
+  padding: 0;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.offer-form__optional {
+  margin-left: 6px;
+  color: var(--text-subtle);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.offer-form__hint {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.offer-form__error {
+  color: var(--danger-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.offer-form .text-input {
+  height: 44px;
+  font-size: 16px;
+
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 1px;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger-text);
+  }
+}
+
+.offer-form .offer-form__textarea {
+  height: auto;
+  min-height: 88px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+  color: inherit;
+  resize: vertical;
+}
+
+.offer-form__cash {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 180px;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.offer-form__submit {
+  align-self: stretch;
+
+  @media (min-width: 640px) {
+    align-self: flex-end;
+    min-width: 160px;
+  }
+}
+
+/* Listing choices: a radio per listing, shown as a row with its photo. */
+
+.offer-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 248px;
+  overflow-y: auto;
+}
+
+.offer-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--border-strong);
+  }
+
+  input {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+
+  &:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+}
+
+.offer-choice__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.offer-choice__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.offer-choice__title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.offer-choice__meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Offer card in the chat. */
+
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 420px);
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-card);
+  background: var(--bg-alt);
+}
+
+.offer-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+
+.offer-card__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+  }
+}
+
+.offer-card__status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.offer-card__status--pending {
+  background: var(--accent-soft);
+}
+
+.offer-card__status--accepted {
+  background: var(--success);
+  color: #fff;
+}
+
+.offer-card__status--declined,
+.offer-card__status--withdrawn {
+  color: var(--text-muted);
+}
+
+.offer-card__listing {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+
+  &:hover {
+    border-color: var(--border-strong);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+}
+
+.offer-card__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.offer-card__listing-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.offer-card__listing-title {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.offer-card__listing-meta,
+.offer-card__note {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.offer-card__text {
+  font-size: 15px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.offer-card__cash {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.offer-card__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.offer-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+}
+
+.offer-card__field-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.offer-card__optional {
+  color: var(--text-subtle);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.offer-card .offer-card__textarea {
+  height: auto;
+  min-height: 72px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+  color: inherit;
+  resize: vertical;
+
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 1px;
+  }
+}
+
+.offer-card__error {
+  color: var(--danger-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* "Jordan accepted the trade offer" lines between messages. */
+.offer-event {
+  align-self: center;
+  margin-block: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}

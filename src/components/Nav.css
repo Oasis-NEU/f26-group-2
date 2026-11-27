@@ -158,3 +158,26 @@
     white-space: nowrap;
   }
 }
+
+/* Red dot on Messages when there's an unread message. The ring in the nav's
+   background color keeps it separate from the text or icon underneath. */
+.nav__messages,
+.nav__icon-link {
+  position: relative;
+}
+
+.nav__dot {
+  position: absolute;
+  top: -3px;
+  right: -10px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.nav__dot--icon {
+  top: 6px;
+  right: 6px;
+}

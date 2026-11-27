@@ -12,7 +12,7 @@ export const CATEGORIES = [
 
 export const CONDITIONS = ['New', 'Like new', 'Good', 'Fair']
 
-export const PAYMENT_METHODS = ['Venmo', 'Zelle', 'Cash', 'Open to trade']
+export const PAYMENT_METHODS = ['Venmo', 'Zelle', 'Cash', 'Cash App', 'PayPal', 'Apple Cash', 'Open to trade']
 
 export const PICKUP_SPOTS = [
   'Curry Student Center',

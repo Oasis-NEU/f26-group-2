@@ -55,7 +55,7 @@ function Terms() {
               </li>
               <li>Never share your home address or dorm room number, and don’t ask others for theirs.</li>
               <li>
-                Payment happens outside the site (cash, Venmo, Zelle, Cash App, or a trade). Check the
+                Payment happens outside the site (cash, Venmo, Zelle, Cash App, PayPal, Apple Cash, or a trade). Check the
                 item before you pay, and for online transfers, don’t pay until you’ve received it.
               </li>
               <li>

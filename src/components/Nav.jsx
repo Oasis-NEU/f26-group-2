@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { MessageCircle } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
+import { useUnreadMessages } from '../hooks/useUnreadMessages'
 import { getUserInitials } from '../utils/initials'
 import LogoMark from './LogoMark'
 import SearchBar from './SearchBar'
@@ -21,6 +22,8 @@ function Logo() {
 function Nav({ variant = 'public' }) {
   const { user } = useAuth()
   const avatarUrl = user?.user_metadata?.avatar_url
+  // Only the signed-in nav has a Messages link to put the dot on.
+  const hasUnread = useUnreadMessages(variant === 'app' ? user?.id : null)
 
   if (variant === 'app') {
     return (
@@ -33,12 +36,23 @@ function Nav({ variant = 'public' }) {
           <Link className="nav__link nav__link--hide-mobile" to="/dashboard">
             Dashboard
           </Link>
-          <Link className="nav__link nav__link--hide-mobile" to="/messages">
+          <Link className="nav__link nav__link--hide-mobile nav__messages" to="/messages">
             Messages
+            {hasUnread && (
+              <>
+                <span className="nav__dot" aria-hidden="true" />
+                <span className="visually-hidden">, new messages</span>
+              </>
+            )}
           </Link>
           {/* Phones get an icon instead of the text link. */}
-          <Link className="nav__icon-link" to="/messages" aria-label="Messages">
+          <Link
+            className="nav__icon-link"
+            to="/messages"
+            aria-label={hasUnread ? 'Messages, new messages' : 'Messages'}
+          >
             <MessageCircle size={22} aria-hidden="true" />
+            {hasUnread && <span className="nav__dot nav__dot--icon" aria-hidden="true" />}
           </Link>
           <Link className="btn btn--primary" to="/sell">
             Sell

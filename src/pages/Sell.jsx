@@ -13,7 +13,8 @@ import {
 } from '../data/sellOptions'
 import './Sell.css'
 
-const MAX_PHOTOS = 6
+// Must match listing_images_position_check (positions 0-7).
+const MAX_PHOTOS = 8
 const MAX_PHOTO_MB = 5
 const MIN_TITLE = 3 // the listings table rejects shorter titles
 const MAX_TITLE = 80
@@ -40,6 +41,7 @@ const EMPTY_FORM = {
 
 // In page order: after a failed submit, focus moves to the first field with an error.
 const FIELD_IDS = {
+  photos: 'sell-photos',
   title: 'sell-title',
   description: 'sell-description',
   price: 'sell-price',
@@ -299,6 +301,8 @@ function Sell() {
     if (submitting) return
 
     const nextErrors = validate(form)
+    // Every listing needs at least one photo (the cover on Browse).
+    if (!photos.length) nextErrors.photos = 'Add at least one photo of the item.'
     setErrors(nextErrors)
     const invalid = Object.keys(FIELD_IDS).filter((field) => nextErrors[field])
     if (invalid.length) {
@@ -437,10 +441,10 @@ function Sell() {
 
           <section className="sell__card" aria-labelledby="sell-photos-heading">
             <h2 className="sell__section-title" id="sell-photos-heading">
-              Photos
+              Photos <Required />
             </h2>
             <p className="field__hint" id="sell-photos-hint">
-              Up to {MAX_PHOTOS} photos, {MAX_PHOTO_MB} MB each. The first one is the cover.
+              Add 1 to {MAX_PHOTOS} photos, {MAX_PHOTO_MB} MB each. The first one is the cover.
             </p>
 
             <ul className="photo-grid">
@@ -490,6 +494,7 @@ function Sell() {
                   accept="image/*"
                   multiple
                   disabled={photosFull}
+                  aria-invalid={Boolean(errors.photos)}
                   aria-describedby={describedBy('sell-photos-hint', errors.photos && errorId('photos'))}
                   onChange={handlePhotos}
                 />

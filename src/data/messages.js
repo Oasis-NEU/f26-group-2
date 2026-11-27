@@ -24,7 +24,7 @@ function readableError(error, fallback) {
   return new Error(fallback, { cause: error })
 }
 
-function coverOf(listing) {
+export function coverOf(listing) {
   const images = [...(listing?.listing_images ?? [])].sort((a, b) => a.position - b.position)
   return images[0]?.url ?? null
 }
@@ -195,7 +195,11 @@ export async function startConversation(listingId, userId, body) {
   return conversationId
 }
 
-const MESSAGE_FIELDS = 'id, sender_id, body, created_at, read_at'
+// Messages about a trade offer carry the offer (with its current status), so
+// the chat can show it as a card. Needs the trade_offers_in_messages migration.
+const MESSAGE_FIELDS = `id, sender_id, body, created_at, read_at, trade_offer_id, offer_event,
+  trade_offer:trade_offers(id, status, description, cash_cents, from_user_id, response_note,
+    offered_listing:listings!trade_offers_offered_listing_id_fkey(${LISTING}))`
 
 // The newest messages in a conversation, oldest first (for display).
 export async function fetchMessages(conversationId) {
@@ -237,6 +241,10 @@ export async function sendMessage(conversationId, userId, body) {
   return data
 }
 
+// Fired on window after messages are marked read, so the nav's unread dot
+// can update right away instead of waiting for its next check.
+export const MESSAGES_READ_EVENT = 'husky:messages-read'
+
 // Marks the other person's messages in this conversation as read.
 export async function markConversationRead(conversationId, userId) {
   const { error } = await supabase
@@ -247,6 +255,22 @@ export async function markConversationRead(conversationId, userId) {
     .is('read_at', null)
   // Not worth interrupting the chat over; the unread dot just stays.
   if (error) console.error(error)
+  else window.dispatchEvent(new Event(MESSAGES_READ_EVENT))
+}
+
+// True when someone has sent the user a message they haven't opened yet.
+// Same rule as the inbox's unread counts. The conversations join keeps it to
+// the user's own conversations (admins can read everyone's).
+export async function hasUnreadMessages(userId) {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('id, conversations!inner(buyer_id, seller_id)')
+    .neq('sender_id', userId)
+    .is('read_at', null)
+    .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`, { referencedTable: 'conversations' })
+    .limit(1)
+  if (error) throw error
+  return data.length > 0
 }
 
 // Postgres sends microseconds ("…16.063123+00:00"), which some browsers can't
